@@ -1,0 +1,53 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://assets/map_of_europe.jpg" type="Texture" id=1]
+[ext_resource path="res://MapCamera.gd" type="Script" id=3]
+[ext_resource path="res://world.gd" type="Script" id=4]
+[ext_resource path="res://assets/icon_city.png" type="Texture" id=5]
+[ext_resource path="res://assets/icon_city_hower_over.png" type="Texture" id=6]
+[ext_resource path="res://assets/icon_city_pressed.png" type="Texture" id=7]
+
+[sub_resource type="CircleShape2D" id=1]
+
+[sub_resource type="Theme" id=2]
+
+[node name="world" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="MapOfEurope" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+
+[node name="MapCamera" type="KinematicBody2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MapCamera"]
+shape = SubResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="MapCamera"]
+current = true
+
+[node name="TextureButton" type="TextureButton" parent="."]
+margin_left = 265.0
+margin_top = -13.0
+margin_right = 777.0
+margin_bottom = 499.0
+rect_scale = Vector2( 0.1, 0.1 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 7 )
+texture_hover = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 266.0
+margin_top = 34.0
+margin_right = 311.0
+margin_bottom = 60.0
+theme = SubResource( 2 )
+text = "Narva"
+align = 1
+valign = 1
+
+[connection signal="pressed" from="TextureButton" to="." method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="TextureButton" to="MapCamera" method="_on_TextureButton_pressed"]

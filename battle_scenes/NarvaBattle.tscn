@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://battle_scenes/NarvaBattleCamera.gd" type="Script" id=1]
+[ext_resource path="res://assets/BattleOfNarvaMap.png" type="Texture" id=2]
+[ext_resource path="res://battle_units/sw_infantry.tscn" type="PackedScene" id=3]
+[ext_resource path="res://battle_units/ru_infantry.tscn" type="PackedScene" id=4]
+[ext_resource path="res://battle_scenes/NarvaBattle.gd" type="Script" id=5]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 5.89726
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 5 )
+
+[node name="BattleOfNarvaMap" type="Sprite" parent="."]
+position = Vector2( 1244, -68 )
+scale = Vector2( 3, 3 )
+texture = ExtResource( 2 )
+
+[node name="NarvaBattleCamera" type="KinematicBody2D" parent="."]
+position = Vector2( 226, 720 )
+scale = Vector2( 3, 3 )
+script = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NarvaBattleCamera"]
+position = Vector2( -0.999996, -3.05176e-05 )
+shape = SubResource( 1 )
+disabled = true
+
+[node name="Camera2D" type="Camera2D" parent="NarvaBattleCamera"]
+position = Vector2( -1, 0 )
+scale = Vector2( 0.333333, 0.333333 )
+current = true
+
+[node name="sw_infantry1" parent="." instance=ExtResource( 3 )]
+position = Vector2( 93, 845 )
+rotation = 0.661661
+
+[node name="sw_infantry2" parent="." instance=ExtResource( 3 )]
+position = Vector2( -43, 701 )
+rotation = 0.661661
+
+[node name="ru_infantry1" parent="." instance=ExtResource( 4 )]
+position = Vector2( 620, 353 )
+rotation = -2.53435
+scale = Vector2( 1.44025, 1.46352 )
+
+[node name="ru_infantry2" parent="." instance=ExtResource( 4 )]
+position = Vector2( 461, 242 )
+rotation = -2.53435
+scale = Vector2( 1.44025, 1.46352 )
