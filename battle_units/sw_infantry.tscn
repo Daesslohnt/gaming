@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://assets/sw_infantry_img.png" type="Texture" id=1]
 [ext_resource path="res://battle_units/sw_infantry.gd" type="Script" id=2]
@@ -10,6 +10,7 @@
 [ext_resource path="res://assets/fire_animation/musket_firing/5.png" type="Texture" id=8]
 [ext_resource path="res://assets/fire_animation/musket_firing/4.png" type="Texture" id=9]
 [ext_resource path="res://assets/fire_animation/musket_firing/2.png" type="Texture" id=10]
+[ext_resource path="res://assets/fire_animation/pikes.png" type="Texture" id=11]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 30.5556, 31.875 )
@@ -40,6 +41,19 @@ animations = [ {
 "speed": 5.0
 } ]
 
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ null ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "pikes",
+"speed": 5.0
+} ]
+
 [sub_resource type="ShaderMaterial" id=3]
 
 [node name="KinematicBody2D" type="KinematicBody2D"]
@@ -57,10 +71,17 @@ frames = SubResource( 2 )
 animation = "default_selected"
 
 [node name="firing_sprite" type="AnimatedSprite" parent="."]
-position = Vector2( 0, -35.6216 )
+visible = false
+position = Vector2( 0, -36.3486 )
 scale = Vector2( 0.128442, 0.0768892 )
 frames = SubResource( 4 )
-animation = "none"
+animation = "firing"
+
+[node name="pikes_sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0.701646, -54.5229 )
+scale = Vector2( 0.128442, 0.0768892 )
+frames = SubResource( 5 )
+animation = "pikes"
 
 [node name="Button" type="Button" parent="."]
 modulate = Color( 1, 1, 1, 0 )
