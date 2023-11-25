@@ -1,13 +1,23 @@
 extends KinematicBody2D
 
+var is_player = false
+
 export var speed = 100
 var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
+var attackers = []
+var enemy = null
 var selected = false
-var fire = true
+var fire_attack = false
+var fire = false
+var attack_mode = "fire"
+
+# sprites
 var sprite = NAN
-var firing = NAN
-var is_player = false
+var firing_sprite = NAN
+
+var attack_time_1: float = 0
+var attack_time_2: float = 6
 
 
 # Mechanics
@@ -15,57 +25,112 @@ var HealthPoints = 100
 var Discipline = 100
 var DistanceDamage = 15
 
-signal enemy_clicked(click_position)
-signal iam_dead
+signal enemy_clicked
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == BUTTON_RIGHT:
-			click_position = get_global_mouse_position()
-			if check_clicked(click_position):
-				emit_signal("enemy_clicked", position)
-				print("ru clicked")
+			var select_position = get_global_mouse_position()
+			if check_clicked(select_position):
+				emit_signal("enemy_clicked", self)
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
 	sprite = $pictogram
-	firing = $firing_sprite
+	firing_sprite = $firing_sprite
 	sprite.play("default")
-	firing.play("none")
+	firing_sprite.play("none")
 
 func _physics_process(delta):
+	attack_time_2 += delta
 	if is_player:
-		if selected and Input.is_action_just_pressed("left_click"):
-			click_position = get_global_mouse_position()
-			selected = false
-			
-			sprite.play("default")
-			
-		var target_position = (click_position - position).normalized()
-		
-		if position.distance_to(click_position) > 50:
-			move_and_slide(target_position * speed)
-		if fire:
-			firing.play("firing")
-		else:
-			firing.play("non")
-	
-	mechanics()
+		slection_mechanic_player()
+		movment_mechanic(delta)
+		attack_mechanic()
+	else:
+		selection_mechanic_npc()
+		npc_mechanics()
 
-func mechanics():
+func selection_mechanic_npc():
+	if Input.is_action_just_pressed("right_click"):
+		var select_position = get_global_mouse_position()
+		if check_clicked(select_position):
+			print("etwas")
+			emit_signal("enemy_clicked", self)
+
+func slection_mechanic_player():
+	if Input.is_action_just_pressed("left_click") and selected:
+		click_position = get_global_mouse_position()
+		selected = false
+		fire_attack = false
+		sprite.play("default")
+	
+	if Input.is_action_just_pressed("left_click") and not selected:
+		var select_position = get_global_mouse_position()
+		if check_clicked(select_position):
+			selected = true
+			sprite.play("default_selected")
+	
+	if Input.is_action_just_pressed("right_click") and selected:
+		selected = false
+		sprite.play("default")
+		
+	if Input.is_action_just_pressed("1") and selected:
+		attack_mode = "fire"
+	
+	if Input.is_action_just_pressed("2") and selected:
+		fire = false
+		fire_attack = false
+		attack_mode = "pikes"
+		
+	if enemy == null:
+		fire = false
+		fire_attack = false
+
+func attack_mechanic():
+	if fire and attack_mode == "fire": # and position.distance_to(click_position) < 310
+		if attack_time_2-attack_time_1 > 6:
+			#emit_signal("do_damage", 20, enemy.position)
+			enemy.get_damaged(20, self)
+			attack_time_2 = 0
+		firing_sprite.play("firing")
+	else:
+		firing_sprite.play("none")
+
+func movment_mechanic(delta):
+	if fire_attack:
+		if position.distance_to(enemy.position) > 300:
+			var target_position = (enemy.position - position).normalized()
+			unit_movement(target_position, delta)
+		else:
+			click_position = position
+			fire = true
+	else:
+		if position.distance_to(click_position) > 50:
+			var target_position = (click_position - position).normalized()
+			unit_movement(target_position, delta)
+			fire = false
+
+func unit_movement(target_position, delta):
+	var target_rotation_degree = rad2deg(target_position.angle()) + 90
+	if abs(target_rotation_degree) < 120:
+		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
+	move_and_slide(target_position * speed)
+
+func npc_mechanics():
 	if HealthPoints == 0:
 		print("Dead!!!")
-		emit_signal("iam_dead", self)
+		for attacker in attackers:
+			attacker.enemy = null
 		queue_free()
 
-func _on_Button_pressed():
-	selected = !selected
-	if selected:
-		sprite.play("default_selected")
-	else:
-		sprite.play("default")
 
-func get_damaged(dm):
+
+# logic
+
+func get_damaged(dm, attacker):
+	print("get damaged ", dm)
+	attackers.append(attacker)
 	HealthPoints -= dm
 	if HealthPoints < 0:
 		HealthPoints = 0

@@ -40,7 +40,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="ru_infantry" type="KinematicBody2D"]
+[node name="ru_infantry" type="KinematicBody2D" groups=["russia"]]
 script = ExtResource( 6 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -56,7 +56,7 @@ animations = [ {
 
 [sub_resource type="ShaderMaterial" id=3]
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[node name="KinematicBody2D" type="KinematicBody2D" groups=["sweden"]]
 scale = Vector2( 1.42522, 1.37557 )
 script = ExtResource( 2 )
 
@@ -83,6 +83,7 @@ frames = SubResource( 5 )
 animation = "pikes"
 
 [node name="Button" type="Button" parent="."]
+visible = false
 modulate = Color( 1, 1, 1, 0 )
 material = SubResource( 3 )
 margin_left = -51.9218

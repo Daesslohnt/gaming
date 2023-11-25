@@ -9,7 +9,7 @@
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.89726
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" groups=["sweden"]]
 script = ExtResource( 5 )
 
 [node name="BattleOfNarvaMap" type="Sprite" parent="."]

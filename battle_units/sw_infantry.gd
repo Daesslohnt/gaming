@@ -1,9 +1,12 @@
 extends KinematicBody2D
 
+var is_player = false
+
 export var speed = 100
 var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
-var enemy_position = Vector2(0, 0)
+var attackers = []
+var enemy = null
 var selected = false
 var fire_attack = false
 var fire = false
@@ -16,10 +19,23 @@ var sprite = NAN
 var firing_sprite = NAN
 var pikes_sprite = NAN
 
-var fire_time_1: float = 0
-var fire_time_2: float = 6
+var attack_time_1: float = 0
+var attack_time_2: float = 6
 
+# Mechanics
+var HealthPoints = 100
+var Discipline = 100
+var DistanceDamage = 15
+
+signal enemy_clicked
 signal do_damage(dm, pos)
+
+func _input(event):
+	if event is InputEventMouseButton and event.pressed:
+		if event.button_index == BUTTON_RIGHT:
+			var select_position = get_global_mouse_position()
+			if check_clicked(select_position):
+				emit_signal("enemy_clicked", self)
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
@@ -29,27 +45,29 @@ func _ready():
 	sprite.play("default")
 	firing_sprite.play("none")
 	pikes_sprite.play("default")
-	
+
 
 func _physics_process(delta):
-	fire_time_2 += delta
-	slection_mechanic()
-	
-	movment_mechanic(delta)
-	
-	attack_mechanic()
+	attack_time_2 += delta
+	if is_player:
+		slection_mechanic_player()
+		movment_mechanic(delta)
+		attack_mechanic()
 
 
-
-
-
-
-func slection_mechanic():
+func slection_mechanic_player():
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
 		selected = false
 		fire_attack = false
+		pikes_attack = false
 		sprite.play("default")
+	
+	if Input.is_action_just_pressed("left_click") and not selected:
+		var select_position = get_global_mouse_position()
+		if check_clicked(select_position):
+			selected = true
+			sprite.play("default_selected")
 	
 	if Input.is_action_just_pressed("right_click") and selected:
 		selected = false
@@ -64,31 +82,44 @@ func slection_mechanic():
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
 		fire_attack = false
-		pikes = true
 		attack_mode = "pikes"
 		pikes_sprite.play("pikes")
+		
+	if enemy == null:
+		fire = false
+		fire_attack = false
+		pikes = false
+		pikes_attack = false
 
 func attack_mechanic():
-	if fire: # and position.distance_to(click_position) < 310
-		if fire_time_2-fire_time_1 > 6:
-			emit_signal("do_damage", 20, enemy_position)
-			fire_time_2 = 0
+	if fire and attack_mode == "fire": # and position.distance_to(click_position) < 310
+		if attack_time_2-attack_time_1 > 6:
+			#emit_signal("do_damage", 20, enemy.position)
+			enemy.get_damaged(20, self)
+			attack_time_2 = 0
 		firing_sprite.play("firing")
+	elif pikes and attack_mode == "pikes":
+		if attack_time_2-attack_time_1 > 6:
+			#emit_signal("do_damage", 20, enemy.position)
+			enemy.get_damaged(40, self)
+			attack_time_2 = 0
 	else:
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
 	if fire_attack:
-		if position.distance_to(enemy_position) > 300:
-			var target_position = (enemy_position - position).normalized()
+		if position.distance_to(enemy.position) > 300:
+			var target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
+			click_position = position
 			fire = true
 	elif pikes_attack:
-		if position.distance_to(enemy_position) > 50:
-			var target_position = (enemy_position - position).normalized()
+		if position.distance_to(enemy.position) > 130:
+			var target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
+			click_position = position
 			pikes = true
 	else:
 		if position.distance_to(click_position) > 50:
@@ -99,28 +130,42 @@ func movment_mechanic(delta):
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
-	if abs(target_rotation_degree) < 90:
-		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 2.0 * delta)
+	if abs(target_rotation_degree) < 120:
+		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 
+func npc_mechanics():
+	if HealthPoints == 0:
+		print("Dead!!!")
+		for attacker in attackers:
+			attacker.enemy = null
+		queue_free()
 
 
 # logic
 
-func _on_enemy_clicked(pos):
+func _attack_enemy(enemy_unit):
+	print(selected)
 	if selected:
 		print("Player clicked on an enemy.")
-		enemy_position = pos
+		enemy = enemy_unit
 		if attack_mode == "fire":
 			fire_attack = true
 		elif attack_mode == "pikes":
 			pikes_attack = true
-
-
-func _on_Button_pressed():
-	selected = not selected
-	if selected:
-		sprite.play("default_selected")
-		click_position = get_global_mouse_position()
 	else:
-		sprite.play("default")
+		print("nicht selected")
+
+func get_damaged(dm, attacker):
+	print("get damaged ", dm)
+	attackers.append(attacker)
+	HealthPoints -= dm
+	if HealthPoints < 0:
+		HealthPoints = 0
+
+func check_clicked(pos):
+	var collision = get_world_2d().direct_space_state.intersect_point(pos)
+	if collision.size() > 0 and collision[0]["collider"] == self:
+		return true
+	return false
+
