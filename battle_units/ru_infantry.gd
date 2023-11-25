@@ -16,6 +16,7 @@ var Discipline = 100
 var DistanceDamage = 15
 
 signal enemy_clicked(click_position)
+signal iam_dead
 
 func _input(event):
 	if event is InputEventMouseButton and event.pressed:
@@ -54,6 +55,8 @@ func _physics_process(delta):
 func mechanics():
 	if HealthPoints == 0:
 		print("Dead!!!")
+		emit_signal("iam_dead", self)
+		queue_free()
 
 func _on_Button_pressed():
 	selected = !selected

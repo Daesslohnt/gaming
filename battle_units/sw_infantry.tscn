@@ -71,7 +71,6 @@ frames = SubResource( 2 )
 animation = "default_selected"
 
 [node name="firing_sprite" type="AnimatedSprite" parent="."]
-visible = false
 position = Vector2( 0, -36.3486 )
 scale = Vector2( 0.128442, 0.0768892 )
 frames = SubResource( 4 )

@@ -7,7 +7,9 @@ var enemy_position = Vector2(0, 0)
 var selected = false
 var fire_attack = false
 var fire = false
-var pikes = true
+var pikes_attack = false
+var pikes = false
+var attack_mode = "fire"
 
 # sprites
 var sprite = NAN
@@ -46,6 +48,7 @@ func slection_mechanic():
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
 		selected = false
+		fire_attack = false
 		sprite.play("default")
 	
 	if Input.is_action_just_pressed("right_click") and selected:
@@ -54,12 +57,15 @@ func slection_mechanic():
 		
 	if Input.is_action_just_pressed("1") and selected:
 		pikes = false
+		pikes_attack = false
+		attack_mode = "fire"
 		pikes_sprite.play("default")
 	
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
 		fire_attack = false
 		pikes = true
+		attack_mode = "pikes"
 		pikes_sprite.play("pikes")
 
 func attack_mechanic():
@@ -78,11 +84,18 @@ func movment_mechanic(delta):
 			unit_movement(target_position, delta)
 		else:
 			fire = true
+	elif pikes_attack:
+		if position.distance_to(enemy_position) > 50:
+			var target_position = (enemy_position - position).normalized()
+			unit_movement(target_position, delta)
+		else:
+			pikes = true
 	else:
 		if position.distance_to(click_position) > 50:
 			var target_position = (click_position - position).normalized()
 			unit_movement(target_position, delta)
 			fire = false
+			pikes = false
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
@@ -98,13 +111,16 @@ func _on_enemy_clicked(pos):
 	if selected:
 		print("Player clicked on an enemy.")
 		enemy_position = pos
-		fire_attack = true
+		if attack_mode == "fire":
+			fire_attack = true
+		elif attack_mode == "pikes":
+			pikes_attack = true
 
 
 func _on_Button_pressed():
-	selected = !selected
+	selected = not selected
 	if selected:
 		sprite.play("default_selected")
+		click_position = get_global_mouse_position()
 	else:
 		sprite.play("default")
-	print("selection:", selected)

@@ -16,6 +16,9 @@ func _ready():
 	# deal damage
 	$sw_infantry1.connect("do_damage", self, "_on_do_damage_to_ru")
 	$sw_infantry2.connect("do_damage", self, "_on_do_damage_to_ru")
+	# become dead
+	$ru_infantry1.connect("iam_dead", self, "_on_become_dead")
+	$ru_infantry2.connect("iam_dead", self, "_on_become_dead")
 	
 	sw_infantry1 = $sw_infantry1
 	sw_infantry2 = $sw_infantry2
@@ -36,3 +39,6 @@ func _on_do_damage_to_ru(dm, pos):
 	elif ru_infantry2.check_clicked(pos):
 		print("Damge to RU2: ", dm)
 		ru_infantry2.get_damaged(dm)
+
+func _on_become_dead():
+	print("here should be destruction of unit")
