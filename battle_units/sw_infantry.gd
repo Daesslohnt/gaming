@@ -16,11 +16,14 @@ var attack_mode = "fire"
 
 # sprites
 var sprite = NAN
+var sprite_selection = NAN
 var firing_sprite = NAN
 var pikes_sprite = NAN
 
 var attack_time_1: float = 0
 var attack_time_2: float = 6
+var removalTimer = 0
+var timerStarted = false
 
 # Mechanics
 var HealthPoints = 100
@@ -30,30 +33,36 @@ var DistanceDamage = 15
 signal enemy_clicked
 signal do_damage(dm, pos)
 
-func _input(event):
-	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == BUTTON_RIGHT:
-			var select_position = get_global_mouse_position()
-			if check_clicked(select_position):
-				emit_signal("enemy_clicked", self)
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
 	sprite = $pictogram
+	sprite_selection = $selection
 	firing_sprite = $firing_sprite
 	pikes_sprite = $pikes_sprite
 	sprite.play("default")
 	firing_sprite.play("none")
 	pikes_sprite.play("default")
+	sprite_selection.visible = false
 
 
 func _physics_process(delta):
 	attack_time_2 += delta
+	
 	if is_player:
 		slection_mechanic_player()
 		movment_mechanic(delta)
 		attack_mechanic()
+	else:
+		selection_mechanic_npc()
+		npc_mechanics()
 
+func selection_mechanic_npc():
+	if Input.is_action_just_pressed("right_click"):
+		var select_position = get_global_mouse_position()
+		if check_clicked(select_position):
+			print("etwas")
+			emit_signal("enemy_clicked", self)
 
 func slection_mechanic_player():
 	if Input.is_action_just_pressed("left_click") and selected:
@@ -61,17 +70,19 @@ func slection_mechanic_player():
 		selected = false
 		fire_attack = false
 		pikes_attack = false
-		sprite.play("default")
+		#sprite.play("default")
+		sprite_selection.visible = false
 	
 	if Input.is_action_just_pressed("left_click") and not selected:
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
 			selected = true
-			sprite.play("default_selected")
+			#sprite.play("default_selected")
+			sprite_selection.visible = true
 	
 	if Input.is_action_just_pressed("right_click") and selected:
-		selected = false
-		sprite.play("default")
+		#sprite.play("default")
+		sprite_selection.visible = false
 		
 	if Input.is_action_just_pressed("1") and selected:
 		pikes = false
@@ -140,21 +151,26 @@ func npc_mechanics():
 		for attacker in attackers:
 			attacker.enemy = null
 		queue_free()
+	elif HealthPoints < 25:
+		sprite.play("dm3")
+	elif HealthPoints < 50:
+		sprite.play("dm2")
+	elif HealthPoints < 75:
+		sprite.play("dm1")
+
 
 
 # logic
 
 func _attack_enemy(enemy_unit):
-	print(selected)
+	print("Player clicked on an enemy.")
 	if selected:
-		print("Player clicked on an enemy.")
 		enemy = enemy_unit
 		if attack_mode == "fire":
 			fire_attack = true
 		elif attack_mode == "pikes":
 			pikes_attack = true
-	else:
-		print("nicht selected")
+	selected = false
 
 func get_damaged(dm, attacker):
 	print("get damaged ", dm)

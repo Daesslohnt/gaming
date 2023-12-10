@@ -14,6 +14,7 @@ var attack_mode = "fire"
 
 # sprites
 var sprite = NAN
+var sprite_selection = NAN
 var firing_sprite = NAN
 
 var attack_time_1: float = 0
@@ -27,19 +28,14 @@ var DistanceDamage = 15
 
 signal enemy_clicked
 
-func _input(event):
-	if event is InputEventMouseButton and event.pressed:
-		if event.button_index == BUTTON_RIGHT:
-			var select_position = get_global_mouse_position()
-			if check_clicked(select_position):
-				emit_signal("enemy_clicked", self)
-
 func _ready():
 	click_position = Vector2(position.x, position.y)
 	sprite = $pictogram
+	sprite_selection = $selection
 	firing_sprite = $firing_sprite
 	sprite.play("default")
 	firing_sprite.play("none")
+	sprite_selection.visible = false
 
 func _physics_process(delta):
 	attack_time_2 += delta
@@ -63,17 +59,20 @@ func slection_mechanic_player():
 		click_position = get_global_mouse_position()
 		selected = false
 		fire_attack = false
-		sprite.play("default")
+		#sprite.play("default")
+		sprite_selection.visible = false
 	
 	if Input.is_action_just_pressed("left_click") and not selected:
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
 			selected = true
-			sprite.play("default_selected")
+			#sprite.play("default_selected")
+			sprite_selection.visible = true
 	
 	if Input.is_action_just_pressed("right_click") and selected:
 		selected = false
-		sprite.play("default")
+		#sprite.play("default")
+		sprite_selection.visible = false
 		
 	if Input.is_action_just_pressed("1") and selected:
 		attack_mode = "fire"
@@ -123,10 +122,27 @@ func npc_mechanics():
 		for attacker in attackers:
 			attacker.enemy = null
 		queue_free()
+	elif HealthPoints < 25:
+		sprite.play("dm3")
+	elif HealthPoints < 50:
+		sprite.play("dm2")
+	elif HealthPoints < 75:
+		sprite.play("dm1")
 
+# strategies
 
+func defece_strategy():
+	pass
 
 # logic
+
+func _attack_enemy(enemy_unit):
+	print("Player clicked on an enemy.")
+	if selected:
+		enemy = enemy_unit
+		if attack_mode == "fire":
+			fire_attack = true
+	selected = false
 
 func get_damaged(dm, attacker):
 	print("get damaged ", dm)
@@ -140,3 +156,4 @@ func check_clicked(pos):
 	if collision.size() > 0 and collision[0]["collider"] == self:
 		return true
 	return false
+

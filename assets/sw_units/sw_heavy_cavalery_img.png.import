@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sw_infantry_img_selected.png-c57f2705b6547ba4441ab24244af323e.stex"
+path="res://.import/sw_heavy_cavalery_img.png-5cfa4b0060b909e49fb119e888b43d34.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sw_infantry_img_selected.png"
-dest_files=[ "res://.import/sw_infantry_img_selected.png-c57f2705b6547ba4441ab24244af323e.stex" ]
+source_file="res://assets/sw_units/sw_heavy_cavalery_img.png"
+dest_files=[ "res://.import/sw_heavy_cavalery_img.png-5cfa4b0060b909e49fb119e888b43d34.stex" ]
 
 [params]
 

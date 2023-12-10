@@ -26,7 +26,6 @@ func _ready():
 
 func _on_enemy_clicked(enemy_unit):
 	print("got signal")
-	print(enemy_unit.position)
 	sw_infantry1._attack_enemy(enemy_unit)
 	sw_infantry2._attack_enemy(enemy_unit)
 
