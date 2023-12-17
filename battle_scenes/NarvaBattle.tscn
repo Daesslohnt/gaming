@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://battle_scenes/NarvaBattleCamera.gd" type="Script" id=1]
 [ext_resource path="res://assets/BattleOfNarvaMap.png" type="Texture" id=2]
 [ext_resource path="res://battle_units/sw_infantry.tscn" type="PackedScene" id=3]
 [ext_resource path="res://battle_units/ru_infantry.tscn" type="PackedScene" id=4]
 [ext_resource path="res://battle_scenes/NarvaBattle.gd" type="Script" id=5]
+[ext_resource path="res://battle_units/sw_light_cavalery.tscn" type="PackedScene" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.89726
@@ -32,9 +33,27 @@ position = Vector2( -1, 0 )
 scale = Vector2( 0.333333, 0.333333 )
 current = true
 
+[node name="Panel" type="Panel" parent="NarvaBattleCamera"]
+anchor_left = -0.036
+margin_left = 86.6667
+margin_top = 59.6667
+margin_right = 126.667
+margin_bottom = 99.6667
+rect_scale = Vector2( 2.05165, 1 )
+
+[node name="Label" type="Label" parent="NarvaBattleCamera/Panel"]
+margin_left = 0.974823
+margin_top = 2.0
+margin_right = 90.9748
+margin_bottom = 50.0
+rect_scale = Vector2( 0.198467, 0.338965 )
+text = "Einheit:
+attack modus:
+HP:"
+
 [node name="sw_infantry1" parent="." instance=ExtResource( 3 )]
 position = Vector2( 93, 845 )
-rotation = 0.661661
+rotation = 0.63606
 
 [node name="sw_infantry2" parent="." instance=ExtResource( 3 )]
 position = Vector2( -43, 701 )
@@ -45,7 +64,12 @@ position = Vector2( 620, 353 )
 rotation = -2.53435
 scale = Vector2( 1.44025, 1.46352 )
 
+[node name="sw_light_cavalery1" parent="." instance=ExtResource( 6 )]
+position = Vector2( 343, 925 )
+rotation = 0.319123
+scale = Vector2( 1.44025, 1.46352 )
+
 [node name="ru_infantry2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 461, 242 )
-rotation = -2.53435
+position = Vector2( 415, 186 )
+rotation = -2.69206
 scale = Vector2( 1.44025, 1.46352 )

@@ -5,12 +5,15 @@ var is_player = false
 export var speed = 100
 var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
+var target_position = Vector2(0, 0)
 var attackers = []
+var potential_targets = []
 var enemy = null
 var selected = false
 var fire_attack = false
 var fire = false
 var attack_mode = "fire"
+var strategy = "defense"
 
 # sprites
 var sprite = NAN
@@ -30,6 +33,7 @@ signal enemy_clicked
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
+	target_position = Vector2(position.x, position.y)
 	sprite = $pictogram
 	sprite_selection = $selection
 	firing_sprite = $firing_sprite
@@ -46,12 +50,13 @@ func _physics_process(delta):
 	else:
 		selection_mechanic_npc()
 		npc_mechanics()
+		movment_mechanic(delta)
+		attack_mechanic()
 
 func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
-			print("etwas")
 			emit_signal("enemy_clicked", self)
 
 func slection_mechanic_player():
@@ -59,37 +64,38 @@ func slection_mechanic_player():
 		click_position = get_global_mouse_position()
 		selected = false
 		fire_attack = false
-		#sprite.play("default")
 		sprite_selection.visible = false
+		update_info(true)
 	
 	if Input.is_action_just_pressed("left_click") and not selected:
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
 			selected = true
-			#sprite.play("default_selected")
 			sprite_selection.visible = true
+			update_info(false)
 	
 	if Input.is_action_just_pressed("right_click") and selected:
 		selected = false
-		#sprite.play("default")
 		sprite_selection.visible = false
+		update_info(true)
 		
 	if Input.is_action_just_pressed("1") and selected:
 		attack_mode = "fire"
+		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
 		fire_attack = false
-		attack_mode = "pikes"
+		attack_mode = "bayonet"
+		update_info(false)
 		
 	if enemy == null:
 		fire = false
 		fire_attack = false
 
 func attack_mechanic():
-	if fire and attack_mode == "fire": # and position.distance_to(click_position) < 310
+	if fire and attack_mode == "fire":
 		if attack_time_2-attack_time_1 > 6:
-			#emit_signal("do_damage", 20, enemy.position)
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
@@ -128,11 +134,23 @@ func npc_mechanics():
 		sprite.play("dm2")
 	elif HealthPoints < 75:
 		sprite.play("dm1")
+	
+	if strategy == "defense":
+		defese_strategy()
 
 # strategies
 
-func defece_strategy():
-	pass
+func defese_strategy():
+	if enemy == null:
+		for pot_target in potential_targets:
+			if position.distance_to(pot_target.position) < 300:
+				enemy = pot_target
+	else:
+		if position.distance_to(enemy.position) > 0:
+			attack_mode = "fire"
+			fire_attack = true
+		else:
+			attack_mode = "bayonet"
 
 # logic
 
@@ -143,6 +161,8 @@ func _attack_enemy(enemy_unit):
 		if attack_mode == "fire":
 			fire_attack = true
 	selected = false
+	sprite_selection.visible = false
+	update_info(true)
 
 func get_damaged(dm, attacker):
 	print("get damaged ", dm)
@@ -157,3 +177,9 @@ func check_clicked(pos):
 		return true
 	return false
 
+func update_info(empty):
+	if empty:
+		emit_signal("get_info", "")
+	else:
+		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
+		emit_signal("get_info", info)

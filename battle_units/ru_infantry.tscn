@@ -81,6 +81,7 @@ rect_scale = Vector2( 8.46554, 2.78838 )
 disabled = true
 
 [node name="selection" type="Sprite" parent="."]
+scale = Vector2( 0.12667, 0.112977 )
 texture = ExtResource( 14 )
 
 [connection signal="animation_finished" from="pictogram" to="." method="_on_pictogram_animation_finished"]
