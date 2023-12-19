@@ -12,14 +12,13 @@ var enemy = null
 var selected = false
 var attack = false
 var fire = false
-var pikes = false
+var rapier = false
 var attack_mode = "fire"
 
 # sprites
 var sprite = NAN
 var sprite_selection = NAN
 var firing_sprite = NAN
-var pikes_sprite = NAN
 
 var attack_time_1: float = 0
 var attack_time_2: float = 6
@@ -30,8 +29,6 @@ var timerStarted = false
 var HealthPoints = 100
 var Discipline = 100
 var DistanceDamage = 15
-var CloseDamage = 30
-
 
 signal enemy_clicked
 signal get_info(text_info)
@@ -43,10 +40,8 @@ func _ready():
 	sprite = $pictogram
 	sprite_selection = $selection
 	firing_sprite = $firing_sprite
-	pikes_sprite = $pikes_sprite
 	sprite.play("default")
 	firing_sprite.play("none")
-	pikes_sprite.play("default")
 	sprite_selection.visible = false
 
 
@@ -65,19 +60,17 @@ func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
-			print("etwas")
 			emit_signal("enemy_clicked", self)
 
 func slection_mechanic_player():
-	# left click move
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
+		#target_position = click_position
 		selected = false
 		attack = false
 		sprite_selection.visible = false
 		update_info(true)
 	
-	# select unit
 	if Input.is_action_just_pressed("left_click") and not selected:
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
@@ -85,27 +78,25 @@ func slection_mechanic_player():
 			sprite_selection.visible = true
 			update_info(false)
 	
-	# attack enemy
 	if Input.is_action_just_pressed("right_click") and selected:
 		sprite_selection.visible = false
+		update_info(true)
 		
 	if Input.is_action_just_pressed("1") and selected:
-		pikes = false
+		rapier = false
 		attack = false
 		attack_mode = "fire"
-		pikes_sprite.play("default")
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
 		attack = false
-		attack_mode = "pikes"
-		pikes_sprite.play("pikes")
+		attack_mode = "rapier"
 		update_info(false)
 		
 	if enemy == null:
 		fire = false
-		pikes = false
+		rapier = false
 		attack = false
 
 func attack_mechanic():
@@ -114,9 +105,9 @@ func attack_mechanic():
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
-	elif pikes and attack_mode == "pikes":
+	elif rapier and attack_mode == "rapier":
 		if attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(40, self)
+			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 	else:
 		firing_sprite.play("none")
@@ -129,12 +120,12 @@ func movment_mechanic(delta):
 		else:
 			click_position = position
 			fire = true
-	elif attack and attack_mode == "pikes":
-		if position.distance_to(enemy.position) > 130:
+	elif attack and attack_mode == "rapier":
+		if position.distance_to(enemy.position) > 120:
 			target_position = (enemy.position - position).normalized()
 		else:
 			click_position = position
-			pikes = true
+			rapier = true
 		unit_movement(target_position, delta)
 	else:
 		if position.distance_to(click_position) > 50:
@@ -205,5 +196,5 @@ func update_info(empty):
 	if empty:
 		emit_signal("get_info", "")
 	else:
-		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
+		var info = "Unit: Heavy Cavalery\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
 		emit_signal("get_info", info)

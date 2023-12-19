@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://battle_scenes/NarvaBattleCamera.gd" type="Script" id=1]
 [ext_resource path="res://assets/BattleOfNarvaMap.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://battle_units/ru_infantry.tscn" type="PackedScene" id=4]
 [ext_resource path="res://battle_scenes/NarvaBattle.gd" type="Script" id=5]
 [ext_resource path="res://battle_units/sw_light_cavalery.tscn" type="PackedScene" id=6]
+[ext_resource path="res://battle_units/sw_heavy_cavalery.tscn" type="PackedScene" id=7]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.89726
@@ -64,8 +65,13 @@ position = Vector2( 620, 353 )
 rotation = -2.53435
 scale = Vector2( 1.44025, 1.46352 )
 
+[node name="sw_heavy_cavalery1" parent="." instance=ExtResource( 7 )]
+position = Vector2( -86, 927 )
+rotation = 0.578573
+scale = Vector2( 1.44025, 1.46352 )
+
 [node name="sw_light_cavalery1" parent="." instance=ExtResource( 6 )]
-position = Vector2( 343, 925 )
+position = Vector2( 322, 954 )
 rotation = 0.319123
 scale = Vector2( 1.44025, 1.46352 )
 

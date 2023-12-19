@@ -10,9 +10,8 @@ var attackers = []
 var potential_targets = []
 var enemy = null
 var selected = false
-var fire_attack = false
+var attack = false
 var fire = false
-var bayonet_attack = false
 var bayonet = false
 var attack_mode = "fire"
 var strategy = "defense"
@@ -66,7 +65,7 @@ func slection_mechanic_player():
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
 		selected = false
-		fire_attack = false
+		attack = false
 		sprite_selection.visible = false
 		update_info(true)
 	
@@ -84,19 +83,19 @@ func slection_mechanic_player():
 		
 	if Input.is_action_just_pressed("1") and selected:
 		attack_mode = "fire"
-		bayonet_attack = false
+		attack = false
 		bayonet = false
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
-		fire_attack = false
+		attack = false
 		attack_mode = "bayonet"
 		update_info(false)
 		
 	if enemy == null:
 		fire = false
-		fire_attack = false
+		attack = false
 
 func attack_mechanic():
 	if fire and attack_mode == "fire":
@@ -112,14 +111,14 @@ func attack_mechanic():
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
-	if fire_attack:
+	if attack and attack_mode == "fire":
 		if position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif bayonet_attack:
+	elif attack and attack_mode == "bayonet":
 		if position.distance_to(enemy.position) > 120:
 			target_position = (enemy.position - position).normalized()
 		else:
@@ -161,11 +160,14 @@ func defese_strategy():
 			if position.distance_to(pot_target.position) < 300:
 				enemy = pot_target
 	else:
-		if position.distance_to(enemy.position) > 0:
+		if position.distance_to(enemy.position) > 400:
+			enemy = null
+		elif position.distance_to(enemy.position) > 0:
 			attack_mode = "fire"
-			fire_attack = true
+			attack = true
 		else:
 			attack_mode = "bayonet"
+			attack = true
 
 # logic
 
@@ -173,8 +175,7 @@ func _attack_enemy(enemy_unit):
 	print("Player clicked on an enemy.")
 	if selected:
 		enemy = enemy_unit
-		if attack_mode == "fire":
-			fire_attack = true
+		attack = true
 	selected = false
 	sprite_selection.visible = false
 	update_info(true)

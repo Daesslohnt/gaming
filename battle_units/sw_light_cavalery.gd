@@ -7,6 +7,7 @@ var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
 var target_position = Vector2(0, 0)
 var attackers = []
+var potential_targets = []
 var enemy = null
 var selected = false
 var attack = false
@@ -150,7 +151,22 @@ func npc_mechanics():
 	elif HealthPoints < 75:
 		sprite.play("dm1")
 
+# strategies
 
+func defese_strategy():
+	if enemy == null:
+		for pot_target in potential_targets:
+			if position.distance_to(pot_target.position) < 300:
+				enemy = pot_target
+	else:
+		if position.distance_to(enemy.position) > 400:
+			enemy = null
+		elif position.distance_to(enemy.position) > 0:
+			attack_mode = "fire"
+			attack = true
+		else:
+			attack_mode = "bayonet"
+			attack = true
 
 # logic
 
