@@ -9,8 +9,7 @@ var target_position = Vector2(0, 0)
 var attackers = []
 var enemy = null
 var selected = false
-var fire_attack = false
-var rapier_attack = false
+var attack = false
 var fire = false
 var rapier = false
 var attack_mode = "fire"
@@ -67,8 +66,7 @@ func slection_mechanic_player():
 		click_position = get_global_mouse_position()
 		#target_position = click_position
 		selected = false
-		fire_attack = false
-		rapier_attack = false
+		attack = false
 		sprite_selection.visible = false
 		update_info(true)
 	
@@ -85,21 +83,20 @@ func slection_mechanic_player():
 		
 	if Input.is_action_just_pressed("1") and selected:
 		rapier = false
-		rapier_attack = false
+		attack = false
 		attack_mode = "fire"
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
-		fire_attack = false
+		attack = false
 		attack_mode = "rapier"
 		update_info(false)
 		
 	if enemy == null:
 		fire = false
-		fire_attack = false
 		rapier = false
-		rapier_attack = false
+		attack = false
 
 func attack_mechanic():
 	if fire and attack_mode == "fire":
@@ -115,14 +112,14 @@ func attack_mechanic():
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
-	if fire_attack:
+	if attack and attack_mode == "fire":
 		if position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif rapier_attack:
+	elif attack and attack_mode == "rapier":
 		if position.distance_to(enemy.position) > 120:
 			target_position = (enemy.position - position).normalized()
 		else:
@@ -133,8 +130,6 @@ func movment_mechanic(delta):
 		if position.distance_to(click_position) > 50:
 			target_position = (click_position - position).normalized()
 			unit_movement(target_position, delta)
-			fire = false
-			rapier
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
@@ -163,10 +158,7 @@ func _attack_enemy(enemy_unit):
 	print("Player clicked on an enemy.")
 	if selected:
 		enemy = enemy_unit
-		if attack_mode == "fire":
-			fire_attack = true
-		elif attack_mode == "rapier":
-			rapier_attack = true
+		attack = true
 	selected = false
 	sprite_selection.visible = false
 	update_info(true)

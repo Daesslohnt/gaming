@@ -12,6 +12,8 @@ var enemy = null
 var selected = false
 var fire_attack = false
 var fire = false
+var bayonet_attack = false
+var bayonet = false
 var attack_mode = "fire"
 var strategy = "defense"
 
@@ -28,6 +30,7 @@ var attack_time_2: float = 6
 var HealthPoints = 100
 var Discipline = 100
 var DistanceDamage = 15
+var CloseDamage = 40
 
 signal enemy_clicked
 
@@ -81,6 +84,8 @@ func slection_mechanic_player():
 		
 	if Input.is_action_just_pressed("1") and selected:
 		attack_mode = "fire"
+		bayonet_attack = false
+		bayonet = false
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
@@ -99,22 +104,32 @@ func attack_mechanic():
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
+	elif bayonet and attack_mode == "bayonet":
+		if attack_time_2-attack_time_1 > 6:
+			enemy.get_damaged(20, self)
+			attack_time_2 = 0
 	else:
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
 	if fire_attack:
 		if position.distance_to(enemy.position) > 300:
-			var target_position = (enemy.position - position).normalized()
+			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
+	elif bayonet_attack:
+		if position.distance_to(enemy.position) > 120:
+			target_position = (enemy.position - position).normalized()
+		else:
+			click_position = position
+			bayonet = true
+		unit_movement(target_position, delta)
 	else:
 		if position.distance_to(click_position) > 50:
-			var target_position = (click_position - position).normalized()
+			target_position = (click_position - position).normalized()
 			unit_movement(target_position, delta)
-			fire = false
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90

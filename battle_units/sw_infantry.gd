@@ -9,9 +9,8 @@ var target_position = Vector2(0, 0)
 var attackers = []
 var enemy = null
 var selected = false
-var fire_attack = false
+var attack = false
 var fire = false
-var pikes_attack = false
 var pikes = false
 var attack_mode = "fire"
 
@@ -69,14 +68,15 @@ func selection_mechanic_npc():
 			emit_signal("enemy_clicked", self)
 
 func slection_mechanic_player():
+	# left click move
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
 		selected = false
-		fire_attack = false
-		pikes_attack = false
+		attack = false
 		sprite_selection.visible = false
 		update_info(true)
 	
+	# select unit
 	if Input.is_action_just_pressed("left_click") and not selected:
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
@@ -84,28 +84,28 @@ func slection_mechanic_player():
 			sprite_selection.visible = true
 			update_info(false)
 	
+	# attack enemy
 	if Input.is_action_just_pressed("right_click") and selected:
 		sprite_selection.visible = false
 		
 	if Input.is_action_just_pressed("1") and selected:
 		pikes = false
-		pikes_attack = false
+		attack = false
 		attack_mode = "fire"
 		pikes_sprite.play("default")
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
-		fire_attack = false
+		attack = false
 		attack_mode = "pikes"
 		pikes_sprite.play("pikes")
 		update_info(false)
 		
 	if enemy == null:
 		fire = false
-		fire_attack = false
 		pikes = false
-		pikes_attack = false
+		attack = false
 
 func attack_mechanic():
 	if fire and attack_mode == "fire":
@@ -121,14 +121,14 @@ func attack_mechanic():
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
-	if fire_attack:
+	if attack and attack_mode == "fire":
 		if position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif pikes_attack:
+	elif attack and attack_mode == "pikes":
 		if position.distance_to(enemy.position) > 130:
 			target_position = (enemy.position - position).normalized()
 		else:
@@ -139,8 +139,6 @@ func movment_mechanic(delta):
 		if position.distance_to(click_position) > 50:
 			target_position = (click_position - position).normalized()
 			unit_movement(target_position, delta)
-			fire = false
-			pikes = false
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
@@ -169,10 +167,7 @@ func _attack_enemy(enemy_unit):
 	print("Player clicked on an enemy.")
 	if selected:
 		enemy = enemy_unit
-		if attack_mode == "fire":
-			fire_attack = true
-		elif attack_mode == "pikes":
-			pikes_attack = true
+		attack = true
 	selected = false
 	sprite_selection.visible = false
 	update_info(true)
