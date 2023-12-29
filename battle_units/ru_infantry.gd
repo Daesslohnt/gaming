@@ -32,6 +32,8 @@ var DistanceDamage = 15
 var CloseDamage = 40
 
 signal enemy_clicked
+signal get_info(text_info)
+signal iam_dead
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
@@ -46,14 +48,17 @@ func _ready():
 func _physics_process(delta):
 	attack_time_2 += delta
 	if is_player:
+		death_mechanics()
 		slection_mechanic_player()
 		movment_mechanic(delta)
 		attack_mechanic()
 	else:
+		death_mechanics()
 		selection_mechanic_npc()
-		npc_mechanics()
 		movment_mechanic(delta)
 		attack_mechanic()
+		if strategy == "defense":
+			defese_strategy()
 
 func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
@@ -95,15 +100,16 @@ func slection_mechanic_player():
 		
 	if enemy == null:
 		fire = false
+		bayonet = false
 		attack = false
 
 func attack_mechanic():
-	if fire and attack_mode == "fire":
+	if attack and fire and attack_mode == "fire":
 		if attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
-	elif bayonet and attack_mode == "bayonet":
+	elif attack and bayonet and attack_mode == "bayonet":
 		if attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
@@ -112,13 +118,13 @@ func attack_mechanic():
 
 func movment_mechanic(delta):
 	if attack and attack_mode == "fire":
-		if position.distance_to(enemy.position) > 300:
+		if enemy != null and position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif attack and attack_mode == "bayonet":
+	elif enemy != null and attack and attack_mode == "bayonet":
 		if position.distance_to(enemy.position) > 120:
 			target_position = (enemy.position - position).normalized()
 		else:
@@ -126,7 +132,7 @@ func movment_mechanic(delta):
 			bayonet = true
 		unit_movement(target_position, delta)
 	else:
-		if position.distance_to(click_position) > 50:
+		if enemy != null and position.distance_to(click_position) > 50:
 			target_position = (click_position - position).normalized()
 			unit_movement(target_position, delta)
 
@@ -136,11 +142,11 @@ func unit_movement(target_position, delta):
 		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 
-func npc_mechanics():
+func death_mechanics():
 	if HealthPoints == 0:
 		print("Dead!!!")
 		for attacker in attackers:
-			attacker.enemy = null
+			emit_signal("iam_dead", attacker)
 		queue_free()
 	elif HealthPoints < 25:
 		sprite.play("dm3")
@@ -148,9 +154,6 @@ func npc_mechanics():
 		sprite.play("dm2")
 	elif HealthPoints < 75:
 		sprite.play("dm1")
-	
-	if strategy == "defense":
-		defese_strategy()
 
 # strategies
 
@@ -159,7 +162,7 @@ func defese_strategy():
 		for pot_target in potential_targets:
 			if position.distance_to(pot_target.position) < 300:
 				enemy = pot_target
-	else:
+	if enemy != null:
 		if position.distance_to(enemy.position) > 400:
 			enemy = null
 		elif position.distance_to(enemy.position) > 0:
@@ -182,7 +185,8 @@ func _attack_enemy(enemy_unit):
 
 func get_damaged(dm, attacker):
 	print("get damaged ", dm)
-	attackers.append(attacker)
+	if not (attacker in attackers):
+		attackers.append(attacker)
 	HealthPoints -= dm
 	if HealthPoints < 0:
 		HealthPoints = 0
@@ -199,3 +203,9 @@ func update_info(empty):
 	else:
 		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
 		emit_signal("get_info", info)
+
+func enemy_dead_protocol(attacker):
+	if self == attacker:
+		potential_targets.erase(enemy)
+		enemy = null
+		attack = null

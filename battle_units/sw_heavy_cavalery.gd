@@ -32,6 +32,7 @@ var DistanceDamage = 15
 
 signal enemy_clicked
 signal get_info(text_info)
+signal iam_dead
 
 
 func _ready():
@@ -49,12 +50,15 @@ func _physics_process(delta):
 	attack_time_2 += delta
 	
 	if is_player:
+		death_mechanics()
 		slection_mechanic_player()
 		movment_mechanic(delta)
 		attack_mechanic()
 	else:
+		death_mechanics()
 		selection_mechanic_npc()
-		npc_mechanics()
+		movment_mechanic(delta)
+		attack_mechanic()
 
 func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
@@ -65,7 +69,6 @@ func selection_mechanic_npc():
 func slection_mechanic_player():
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
-		#target_position = click_position
 		selected = false
 		attack = false
 		sprite_selection.visible = false
@@ -100,12 +103,12 @@ func slection_mechanic_player():
 		attack = false
 
 func attack_mechanic():
-	if fire and attack_mode == "fire":
+	if attack and fire and attack_mode == "fire":
 		if attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
-	elif rapier and attack_mode == "rapier":
+	elif attack and rapier and attack_mode == "rapier":
 		if attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
@@ -138,11 +141,11 @@ func unit_movement(target_position, delta):
 		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 
-func npc_mechanics():
+func death_mechanics():
 	if HealthPoints == 0:
 		print("Dead!!!")
 		for attacker in attackers:
-			attacker.enemy = null
+			emit_signal("iam_dead", attacker)
 		queue_free()
 	elif HealthPoints < 25:
 		sprite.play("dm3")
@@ -185,6 +188,7 @@ func get_damaged(dm, attacker):
 	HealthPoints -= dm
 	if HealthPoints < 0:
 		HealthPoints = 0
+		death_mechanics()
 
 func check_clicked(pos):
 	var collision = get_world_2d().direct_space_state.intersect_point(pos)
@@ -198,3 +202,9 @@ func update_info(empty):
 	else:
 		var info = "Unit: Heavy Cavalery\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
 		emit_signal("get_info", info)
+
+func enemy_dead_protocol(attacker):
+	if self == attacker:
+		potential_targets.erase(enemy)
+		enemy = null
+		attack = null

@@ -35,6 +35,7 @@ var CloseDamage = 30
 
 signal enemy_clicked
 signal get_info(text_info)
+signal iam_dead
 
 
 func _ready():
@@ -54,12 +55,13 @@ func _physics_process(delta):
 	attack_time_2 += delta
 	
 	if is_player:
+		death_mechanics()
 		slection_mechanic_player()
 		movment_mechanic(delta)
 		attack_mechanic()
 	else:
+		death_mechanics()
 		selection_mechanic_npc()
-		npc_mechanics()
 
 func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
@@ -109,12 +111,12 @@ func slection_mechanic_player():
 		attack = false
 
 func attack_mechanic():
-	if fire and attack_mode == "fire":
+	if attack and fire and attack_mode == "fire":
 		if attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
-	elif pikes and attack_mode == "pikes":
+	elif attack and pikes and attack_mode == "pikes":
 		if attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(40, self)
 			attack_time_2 = 0
@@ -147,12 +149,12 @@ func unit_movement(target_position, delta):
 		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 
-func npc_mechanics():
+func death_mechanics():
 	if HealthPoints == 0:
-		print("Dead!!!")
 		for attacker in attackers:
-			attacker.enemy = null
+			emit_signal("iam_dead", attacker)
 		queue_free()
+		print("Dead!!!")
 	elif HealthPoints < 25:
 		sprite.play("dm3")
 	elif HealthPoints < 50:
@@ -174,7 +176,7 @@ func defese_strategy():
 			attack_mode = "fire"
 			attack = true
 		else:
-			attack_mode = "bayonet"
+			attack_mode = "pikes"
 			attack = true
 
 # logic
@@ -190,10 +192,12 @@ func _attack_enemy(enemy_unit):
 
 func get_damaged(dm, attacker):
 	print("get damaged ", dm)
-	attackers.append(attacker)
+	if not (attacker in attackers):
+		attackers.append(attacker)
 	HealthPoints -= dm
 	if HealthPoints < 0:
 		HealthPoints = 0
+		death_mechanics()
 
 func check_clicked(pos):
 	var collision = get_world_2d().direct_space_state.intersect_point(pos)
@@ -207,3 +211,9 @@ func update_info(empty):
 	else:
 		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
 		emit_signal("get_info", info)
+
+func enemy_dead_protocol(attacker):
+	if self == attacker:
+		potential_targets.erase(enemy)
+		enemy = null
+		attack = null

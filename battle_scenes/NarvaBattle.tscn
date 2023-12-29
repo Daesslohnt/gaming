@@ -11,7 +11,7 @@
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.89726
 
-[node name="Node2D" type="Node2D" groups=["sweden"]]
+[node name="Node2D" type="Node2D"]
 script = ExtResource( 5 )
 
 [node name="BattleOfNarvaMap" type="Sprite" parent="."]
@@ -52,30 +52,33 @@ text = "Einheit:
 attack modus:
 HP:"
 
-[node name="sw_infantry1" parent="." instance=ExtResource( 3 )]
+[node name="units" type="Node2D" parent="."]
+
+[node name="sw_infantry1" parent="units" instance=ExtResource( 3 )]
 position = Vector2( 93, 845 )
 rotation = 0.63606
+scale = Vector2( 1.42522, 1.37557 )
 
-[node name="sw_infantry2" parent="." instance=ExtResource( 3 )]
+[node name="sw_infantry2" parent="units" instance=ExtResource( 3 )]
 position = Vector2( -43, 701 )
 rotation = 0.661661
 
-[node name="ru_infantry1" parent="." instance=ExtResource( 4 )]
+[node name="ru_infantry1" parent="units" instance=ExtResource( 4 )]
 position = Vector2( 620, 353 )
 rotation = -2.53435
 scale = Vector2( 1.44025, 1.46352 )
 
-[node name="sw_heavy_cavalery1" parent="." instance=ExtResource( 7 )]
+[node name="sw_heavy_cavalery1" parent="units" instance=ExtResource( 7 )]
 position = Vector2( -86, 927 )
 rotation = 0.578573
 scale = Vector2( 1.44025, 1.46352 )
 
-[node name="sw_light_cavalery1" parent="." instance=ExtResource( 6 )]
+[node name="sw_light_cavalery1" parent="units" instance=ExtResource( 6 )]
 position = Vector2( 322, 954 )
 rotation = 0.319123
 scale = Vector2( 1.44025, 1.46352 )
 
-[node name="ru_infantry2" parent="." instance=ExtResource( 4 )]
+[node name="ru_infantry2" parent="units" instance=ExtResource( 4 )]
 position = Vector2( 415, 186 )
 rotation = -2.69206
 scale = Vector2( 1.44025, 1.46352 )
