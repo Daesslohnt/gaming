@@ -12,7 +12,7 @@ var enemy = null
 var selected = false
 var attack = false
 var fire = false
-var pikes = false
+var shrapnel = false
 var attack_mode = "fire"
 var strategy = "defense"
 
@@ -20,24 +20,20 @@ var strategy = "defense"
 var sprite = NAN
 var sprite_selection = NAN
 var firing_sprite = NAN
-var pikes_sprite = NAN
 
 var attack_time_1: float = 0
 var attack_time_2: float = 6
-var removalTimer = 0
-var timerStarted = false
+
 
 # Mechanics
 var HealthPoints = 100
 var Discipline = 100
 var DistanceDamage = 15
-var CloseDamage = 30
-
+var CloseDamage = 40
 
 signal enemy_clicked
 signal get_info(text_info)
 signal iam_dead
-
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
@@ -45,16 +41,12 @@ func _ready():
 	sprite = $pictogram
 	sprite_selection = $selection
 	firing_sprite = $firing_sprite
-	pikes_sprite = $pikes_sprite
 	sprite.play("default")
 	firing_sprite.play("none")
-	pikes_sprite.play("default")
 	sprite_selection.visible = false
-
 
 func _physics_process(delta):
 	attack_time_2 += delta
-	
 	if is_player:
 		death_mechanics()
 		slection_mechanic_player()
@@ -74,11 +66,9 @@ func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
-			print("etwas")
 			emit_signal("enemy_clicked", self)
 
 func slection_mechanic_player():
-	# left click move
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
 		selected = false
@@ -86,7 +76,6 @@ func slection_mechanic_player():
 		sprite_selection.visible = false
 		update_info(true)
 	
-	# select unit
 	if Input.is_action_just_pressed("left_click") and not selected:
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
@@ -94,28 +83,25 @@ func slection_mechanic_player():
 			sprite_selection.visible = true
 			update_info(false)
 	
-	# attack enemy
 	if Input.is_action_just_pressed("right_click") and selected:
 		sprite_selection.visible = false
 		update_info(true)
 		
 	if Input.is_action_just_pressed("1") and selected:
-		pikes = false
-		attack = false
 		attack_mode = "fire"
-		pikes_sprite.play("default")
+		attack = false
+		shrapnel = false
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
 		fire = false
 		attack = false
-		attack_mode = "pikes"
-		pikes_sprite.play("pikes")
+		attack_mode = "shrapnel"
 		update_info(false)
 		
 	if enemy == null:
 		fire = false
-		pikes = false
+		shrapnel = false
 		attack = false
 
 func attack_mechanic():
@@ -124,28 +110,29 @@ func attack_mechanic():
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
-	elif attack and pikes and attack_mode == "pikes":
+	elif attack and shrapnel and attack_mode == "shrapnel":
 		if attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(40, self)
+			enemy.get_damaged(20, self)
 			attack_time_2 = 0
+		firing_sprite.play("firing")
 	else:
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
-	if attack and attack_mode == "fire":
-		if position.distance_to(enemy.position) > 300:
+	if is_instance_valid(enemy) and attack and attack_mode == "fire":
+		if position.distance_to(enemy.position) > 1000:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif attack and attack_mode == "pikes":
-		if position.distance_to(enemy.position) > 130:
+	elif is_instance_valid(enemy) and attack and attack_mode == "shrapnel":
+		if position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
+			unit_movement(target_position, delta)
 		else:
 			click_position = position
-			pikes = true
-		unit_movement(target_position, delta)
+			shrapnel = true
 	else:
 		if position.distance_to(click_position) > 50:
 			target_position = (click_position - position).normalized()
@@ -159,10 +146,10 @@ func unit_movement(target_position, delta):
 
 func death_mechanics():
 	if HealthPoints == 0:
+		print("Dead!!!")
 		for attacker in attackers:
 			emit_signal("iam_dead", attacker)
 		queue_free()
-		print("Dead!!!")
 	elif HealthPoints < 25:
 		sprite.play("dm3")
 	elif HealthPoints < 50:
@@ -177,14 +164,14 @@ func defense_strategy():
 		for pot_target in potential_targets:
 			if position.distance_to(pot_target.position) < 300:
 				enemy = pot_target
-	else:
+	if enemy != null:
 		if position.distance_to(enemy.position) > 400:
 			enemy = null
 		elif position.distance_to(enemy.position) > 0:
 			attack_mode = "fire"
 			attack = true
 		else:
-			attack_mode = "pikes"
+			attack_mode = "shrapnel"
 			attack = true
 
 func agressiv_strategy():
@@ -202,7 +189,7 @@ func agressiv_strategy():
 			attack_mode = "fire"
 			attack = true
 		else:
-			attack_mode = "pikes"
+			attack_mode = "shrapnel"
 			attack = true
 
 # logic
@@ -212,6 +199,7 @@ func _attack_enemy(enemy_unit):
 	if selected:
 		enemy = enemy_unit
 		attack = true
+		print("artilery")
 	selected = false
 	sprite_selection.visible = false
 	update_info(true)
@@ -223,8 +211,7 @@ func get_damaged(dm, attacker):
 	HealthPoints -= dm
 	if HealthPoints < 0:
 		HealthPoints = 0
-		death_mechanics()
-
+	
 func check_clicked(pos):
 	var collision = get_world_2d().direct_space_state.intersect_point(pos)
 	if collision.size() > 0 and collision[0]["collider"] == self:

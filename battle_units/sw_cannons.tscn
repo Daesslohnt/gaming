@@ -1,0 +1,77 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://assets/sw_units/sw_cannons_dm2.png" type="Texture" id=1]
+[ext_resource path="res://assets/fire_animation/cannon_firing/4.png" type="Texture" id=2]
+[ext_resource path="res://assets/fire_animation/cannon_firing/1.png" type="Texture" id=3]
+[ext_resource path="res://assets/fire_animation/cannon_firing/5.png" type="Texture" id=4]
+[ext_resource path="res://assets/selection.png" type="Texture" id=5]
+[ext_resource path="res://assets/fire_animation/cannon_firing/6.png" type="Texture" id=6]
+[ext_resource path="res://assets/fire_animation/cannon_firing/3.png" type="Texture" id=7]
+[ext_resource path="res://assets/fire_animation/cannon_firing/2.png" type="Texture" id=8]
+[ext_resource path="res://assets/fire_animation/cannon_firing/7.png" type="Texture" id=9]
+[ext_resource path="res://assets/sw_units/sw_cannons_dm1.png" type="Texture" id=10]
+[ext_resource path="res://assets/sw_units/sw_cannons.png" type="Texture" id=11]
+[ext_resource path="res://assets/sw_units/sw_cannons_dm3.png" type="Texture" id=12]
+[ext_resource path="res://battle_units/sw_cannons.gd" type="Script" id=13]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 30.5556, 31.875 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 11 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 10 ) ],
+"loop": true,
+"name": "dm1",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "dm2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 12 ) ],
+"loop": true,
+"name": "dm3",
+"speed": 5.0
+} ]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 3 ), ExtResource( 8 ), ExtResource( 7 ), ExtResource( 2 ), ExtResource( 4 ), ExtResource( 6 ), ExtResource( 9 ), null, null, null, null, null, null, null, null, null, null, null, null, null, null ],
+"loop": true,
+"name": "firing",
+"speed": 10.0
+}, {
+"frames": [ null ],
+"loop": true,
+"name": "none",
+"speed": 5.0
+} ]
+
+[node name="KinematicBody2D" type="KinematicBody2D"]
+script = ExtResource( 13 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2( 1.8, 1 )
+shape = SubResource( 1 )
+
+[node name="pictogram" type="AnimatedSprite" parent="."]
+position = Vector2( -5.96046e-08, 0 )
+scale = Vector2( 0.12836, 0.113932 )
+frames = SubResource( 2 )
+
+[node name="firing_sprite" type="AnimatedSprite" parent="."]
+position = Vector2( 0, -36.3486 )
+scale = Vector2( 0.128442, 0.0768892 )
+frames = SubResource( 3 )
+animation = "firing"
+
+[node name="selection" type="Sprite" parent="."]
+rotation = 3.14159
+scale = Vector2( 0.127555, -0.11227 )
+texture = ExtResource( 5 )

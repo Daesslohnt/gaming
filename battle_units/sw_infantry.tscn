@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://assets/sw_units/sw_infantry_img.png" type="Texture" id=1]
 [ext_resource path="res://battle_units/sw_infantry.gd" type="Script" id=2]
@@ -67,8 +67,6 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[sub_resource type="ShaderMaterial" id=3]
-
 [node name="KinematicBody2D" type="KinematicBody2D" groups=["sweden"]]
 scale = Vector2( 1.42522, 1.37557 )
 script = ExtResource( 2 )
@@ -98,15 +96,3 @@ position = Vector2( 0.701646, -54.5229 )
 scale = Vector2( 0.128442, 0.0768892 )
 frames = SubResource( 5 )
 animation = "pikes"
-
-[node name="Button" type="Button" parent="."]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
-material = SubResource( 3 )
-margin_left = -51.9218
-margin_top = -28.3519
-margin_right = -39.9218
-margin_bottom = -8.35195
-rect_scale = Vector2( 8.74618, 2.83197 )
-
-[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]

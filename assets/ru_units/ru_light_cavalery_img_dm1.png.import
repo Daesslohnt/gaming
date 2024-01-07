@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ru_infantry_img_selected.png-f2c4f27b4ddd8fb78d49ccd55bef48fd.stex"
+path="res://.import/ru_light_cavalery_img_dm1.png-c68a1f1b7071a63462c08c54473a91b0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ru_units/ru_infantry_img_selected.png"
-dest_files=[ "res://.import/ru_infantry_img_selected.png-f2c4f27b4ddd8fb78d49ccd55bef48fd.stex" ]
+source_file="res://assets/ru_units/ru_light_cavalery_img_dm1.png"
+dest_files=[ "res://.import/ru_light_cavalery_img_dm1.png-c68a1f1b7071a63462c08c54473a91b0.stex" ]
 
 [params]
 

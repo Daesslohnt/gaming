@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ru_light_cavalery_img_selected.png-b06610d8cff32cc84b99b6811ccb340f.stex"
+path="res://.import/7.png-0d1a45b820426996893af5edf0a81d77.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ru_units/ru_light_cavalery_img_selected.png"
-dest_files=[ "res://.import/ru_light_cavalery_img_selected.png-b06610d8cff32cc84b99b6811ccb340f.stex" ]
+source_file="res://assets/fire_animation/cannon_firing/7.png"
+dest_files=[ "res://.import/7.png-0d1a45b820426996893af5edf0a81d77.stex" ]
 
 [params]
 

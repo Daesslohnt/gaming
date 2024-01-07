@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://battle_scenes/NarvaBattleCamera.gd" type="Script" id=1]
 [ext_resource path="res://assets/BattleOfNarvaMap.png" type="Texture" id=2]
@@ -7,6 +7,10 @@
 [ext_resource path="res://battle_scenes/NarvaBattle.gd" type="Script" id=5]
 [ext_resource path="res://battle_units/sw_light_cavalery.tscn" type="PackedScene" id=6]
 [ext_resource path="res://battle_units/sw_heavy_cavalery.tscn" type="PackedScene" id=7]
+[ext_resource path="res://battle_units/ru_light_cavalery.tscn" type="PackedScene" id=8]
+[ext_resource path="res://battle_units/ru_heavy_cavalery.tscn" type="PackedScene" id=9]
+[ext_resource path="res://battle_units/sw_cannons.tscn" type="PackedScene" id=10]
+[ext_resource path="res://battle_units/ru_cannons.tscn" type="PackedScene" id=11]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.89726
@@ -18,6 +22,56 @@ script = ExtResource( 5 )
 position = Vector2( 1244, -68 )
 scale = Vector2( 3, 3 )
 texture = ExtResource( 2 )
+
+[node name="units" type="Node2D" parent="."]
+
+[node name="sw_infantry1" parent="units" instance=ExtResource( 3 )]
+position = Vector2( 93, 845 )
+rotation = 0.63606
+
+[node name="sw_infantry2" parent="units" instance=ExtResource( 3 )]
+position = Vector2( -43, 701 )
+rotation = 0.661661
+
+[node name="ru_infantry1" parent="units" instance=ExtResource( 4 )]
+position = Vector2( 620, 353 )
+rotation = -2.53435
+scale = Vector2( 1.44025, 1.46352 )
+
+[node name="sw_heavy_cavalery1" parent="units" instance=ExtResource( 7 )]
+position = Vector2( -86, 927 )
+rotation = 0.578573
+scale = Vector2( 1.44025, 1.46352 )
+
+[node name="sw_light_cavalery1" parent="units" instance=ExtResource( 6 )]
+position = Vector2( 322, 954 )
+rotation = 0.319123
+scale = Vector2( 1.44025, 1.46352 )
+
+[node name="ru_infantry2" parent="units" instance=ExtResource( 4 )]
+position = Vector2( 415, 186 )
+rotation = -2.69206
+scale = Vector2( 1.44025, 1.46352 )
+
+[node name="ru_light_cavalery1" parent="units" instance=ExtResource( 8 )]
+position = Vector2( 825, 458 )
+rotation = -2.53785
+scale = Vector2( 1.44106, 1.44106 )
+
+[node name="ru_heavy_cavalery1" parent="units" instance=ExtResource( 9 )]
+position = Vector2( 1016, 596 )
+rotation = -2.41884
+scale = Vector2( 1.45155, 1.45155 )
+
+[node name="sw_cannons1" parent="units" instance=ExtResource( 10 )]
+position = Vector2( 155, 1033 )
+rotation = 0.464734
+scale = Vector2( 1.46527, 1.46527 )
+
+[node name="ru_cannons1" parent="units" instance=ExtResource( 11 )]
+position = Vector2( 833, 275 )
+rotation = -2.54472
+scale = Vector2( 1.40403, 1.40403 )
 
 [node name="NarvaBattleCamera" type="KinematicBody2D" parent="."]
 position = Vector2( 226, 720 )
@@ -51,34 +105,3 @@ rect_scale = Vector2( 0.198467, 0.338965 )
 text = "Einheit:
 attack modus:
 HP:"
-
-[node name="units" type="Node2D" parent="."]
-
-[node name="sw_infantry1" parent="units" instance=ExtResource( 3 )]
-position = Vector2( 93, 845 )
-rotation = 0.63606
-scale = Vector2( 1.42522, 1.37557 )
-
-[node name="sw_infantry2" parent="units" instance=ExtResource( 3 )]
-position = Vector2( -43, 701 )
-rotation = 0.661661
-
-[node name="ru_infantry1" parent="units" instance=ExtResource( 4 )]
-position = Vector2( 620, 353 )
-rotation = -2.53435
-scale = Vector2( 1.44025, 1.46352 )
-
-[node name="sw_heavy_cavalery1" parent="units" instance=ExtResource( 7 )]
-position = Vector2( -86, 927 )
-rotation = 0.578573
-scale = Vector2( 1.44025, 1.46352 )
-
-[node name="sw_light_cavalery1" parent="units" instance=ExtResource( 6 )]
-position = Vector2( 322, 954 )
-rotation = 0.319123
-scale = Vector2( 1.44025, 1.46352 )
-
-[node name="ru_infantry2" parent="units" instance=ExtResource( 4 )]
-position = Vector2( 415, 186 )
-rotation = -2.69206
-scale = Vector2( 1.44025, 1.46352 )

@@ -58,7 +58,9 @@ func _physics_process(delta):
 		movment_mechanic(delta)
 		attack_mechanic()
 		if strategy == "defense":
-			defese_strategy()
+			defense_strategy()
+		elif strategy == "agressive":
+			agressiv_strategy()
 
 func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
@@ -82,7 +84,6 @@ func slection_mechanic_player():
 			update_info(false)
 	
 	if Input.is_action_just_pressed("right_click") and selected:
-		selected = false
 		sprite_selection.visible = false
 		update_info(true)
 		
@@ -117,14 +118,14 @@ func attack_mechanic():
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
-	if attack and attack_mode == "fire":
-		if enemy != null and position.distance_to(enemy.position) > 300:
+	if is_instance_valid(enemy) and attack and attack_mode == "fire":
+		if position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif enemy != null and attack and attack_mode == "bayonet":
+	elif is_instance_valid(enemy) and attack and attack_mode == "bayonet":
 		if position.distance_to(enemy.position) > 120:
 			target_position = (enemy.position - position).normalized()
 		else:
@@ -132,7 +133,7 @@ func movment_mechanic(delta):
 			bayonet = true
 		unit_movement(target_position, delta)
 	else:
-		if enemy != null and position.distance_to(click_position) > 50:
+		if is_instance_valid(enemy) and position.distance_to(click_position) > 50:
 			target_position = (click_position - position).normalized()
 			unit_movement(target_position, delta)
 
@@ -157,7 +158,7 @@ func death_mechanics():
 
 # strategies
 
-func defese_strategy():
+func defense_strategy():
 	if enemy == null:
 		for pot_target in potential_targets:
 			if position.distance_to(pot_target.position) < 300:
@@ -166,6 +167,24 @@ func defese_strategy():
 		if position.distance_to(enemy.position) > 400:
 			enemy = null
 		elif position.distance_to(enemy.position) > 0:
+			attack_mode = "fire"
+			attack = true
+		else:
+			attack_mode = "bayonet"
+			attack = true
+
+func agressiv_strategy():
+	if enemy == null and len(potential_targets) > 0:
+		var argmin = 0
+		var min_dist = 100000
+		for i in range(len(potential_targets)):
+			var dist = position.distance_to(potential_targets[i].position)
+			if dist < min_dist:
+				argmin = i
+				min_dist = dist
+		enemy = potential_targets[argmin]
+	if is_instance_valid(enemy):
+		if position.distance_to(enemy.position) > 200:
 			attack_mode = "fire"
 			attack = true
 		else:
@@ -206,6 +225,7 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
+		print("death_protocol")
 		potential_targets.erase(enemy)
 		enemy = null
 		attack = null

@@ -14,6 +14,7 @@ var attack = false
 var fire = false
 var rapier = false
 var attack_mode = "fire"
+var strategy = "defense"
 
 # sprites
 var sprite = NAN
@@ -59,6 +60,10 @@ func _physics_process(delta):
 		selection_mechanic_npc()
 		movment_mechanic(delta)
 		attack_mechanic()
+		if strategy == "defense":
+			defense_strategy()
+		elif strategy == "agressive":
+			agressiv_strategy()
 
 func selection_mechanic_npc():
 	if Input.is_action_just_pressed("right_click"):
@@ -156,7 +161,7 @@ func death_mechanics():
 
 # strategies
 
-func defese_strategy():
+func defense_strategy():
 	if enemy == null:
 		for pot_target in potential_targets:
 			if position.distance_to(pot_target.position) < 300:
@@ -168,7 +173,25 @@ func defese_strategy():
 			attack_mode = "fire"
 			attack = true
 		else:
-			attack_mode = "bayonet"
+			attack_mode = "rapier"
+			attack = true
+
+func agressiv_strategy():
+	if enemy == null and len(potential_targets) > 0:
+		var argmin = 0
+		var min_dist = 100000
+		for i in range(len(potential_targets)):
+			var dist = position.distance_to(potential_targets[i].position)
+			if dist < min_dist:
+				argmin = i
+				min_dist = dist
+		enemy = potential_targets[argmin]
+	if is_instance_valid(enemy):
+		if position.distance_to(enemy.position) > 200:
+			attack_mode = "fire"
+			attack = true
+		else:
+			attack_mode = "rapier"
 			attack = true
 
 # logic
