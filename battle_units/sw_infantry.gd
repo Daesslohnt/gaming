@@ -21,6 +21,7 @@ var sprite = NAN
 var sprite_selection = NAN
 var firing_sprite = NAN
 var pikes_sprite = NAN
+var img = NAN
 
 var attack_time_1: float = 0
 var attack_time_2: float = 6
@@ -35,7 +36,7 @@ var CloseDamage = 30
 
 
 signal enemy_clicked
-signal get_info(text_info)
+signal get_info(text_info, img)
 signal iam_dead
 
 
@@ -50,6 +51,7 @@ func _ready():
 	firing_sprite.play("none")
 	pikes_sprite.play("default")
 	sprite_selection.visible = false
+	img = preload("res://assets/unit_images/sw_infantry.png")
 
 
 func _physics_process(delta):
@@ -81,6 +83,8 @@ func slection_mechanic_player():
 	# left click move
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
+		print(click_position)
+		print(position)
 		selected = false
 		attack = false
 		sprite_selection.visible = false
@@ -132,14 +136,14 @@ func attack_mechanic():
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
-	if attack and attack_mode == "fire":
+	if is_instance_valid(enemy) and attack and attack_mode == "fire":
 		if position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif attack and attack_mode == "pikes":
+	elif is_instance_valid(enemy) and attack and attack_mode == "pikes":
 		if position.distance_to(enemy.position) > 130:
 			target_position = (enemy.position - position).normalized()
 		else:
@@ -233,10 +237,10 @@ func check_clicked(pos):
 
 func update_info(empty):
 	if empty:
-		emit_signal("get_info", "")
+		emit_signal("get_info", "", null)
 	else:
 		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
-		emit_signal("get_info", info)
+		emit_signal("get_info", info, img)
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:

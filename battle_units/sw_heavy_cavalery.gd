@@ -20,6 +20,7 @@ var strategy = "defense"
 var sprite = NAN
 var sprite_selection = NAN
 var firing_sprite = NAN
+var img = NAN
 
 var attack_time_1: float = 0
 var attack_time_2: float = 6
@@ -32,7 +33,7 @@ var Discipline = 100
 var DistanceDamage = 15
 
 signal enemy_clicked
-signal get_info(text_info)
+signal get_info(text_info, img)
 signal iam_dead
 
 
@@ -45,6 +46,7 @@ func _ready():
 	sprite.play("default")
 	firing_sprite.play("none")
 	sprite_selection.visible = false
+	img = preload("res://assets/unit_images/sw_heavy_cavalery.jpg")
 
 
 func _physics_process(delta):
@@ -121,14 +123,14 @@ func attack_mechanic():
 		firing_sprite.play("none")
 
 func movment_mechanic(delta):
-	if attack and attack_mode == "fire":
+	if is_instance_valid(enemy) and attack and attack_mode == "fire":
 		if position.distance_to(enemy.position) > 300:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
 			click_position = position
 			fire = true
-	elif attack and attack_mode == "rapier":
+	elif is_instance_valid(enemy) and attack and attack_mode == "rapier":
 		if position.distance_to(enemy.position) > 120:
 			target_position = (enemy.position - position).normalized()
 		else:
@@ -142,8 +144,7 @@ func movment_mechanic(delta):
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
-	if abs(target_rotation_degree) < 120:
-		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
+	rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 
 func death_mechanics():
@@ -221,10 +222,10 @@ func check_clicked(pos):
 
 func update_info(empty):
 	if empty:
-		emit_signal("get_info", "")
+		emit_signal("get_info", "", null)
 	else:
 		var info = "Unit: Heavy Cavalery\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
-		emit_signal("get_info", info)
+		emit_signal("get_info", info, img)
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:

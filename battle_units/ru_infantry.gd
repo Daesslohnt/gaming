@@ -20,6 +20,7 @@ var strategy = "defense"
 var sprite = NAN
 var sprite_selection = NAN
 var firing_sprite = NAN
+var img = NAN
 
 var attack_time_1: float = 0
 var attack_time_2: float = 6
@@ -32,7 +33,7 @@ var DistanceDamage = 15
 var CloseDamage = 40
 
 signal enemy_clicked
-signal get_info(text_info)
+signal get_info(text_info, img)
 signal iam_dead
 
 func _ready():
@@ -44,6 +45,7 @@ func _ready():
 	sprite.play("default")
 	firing_sprite.play("none")
 	sprite_selection.visible = false
+	img = preload("res://assets/unit_images/ru_infantry.jpg")
 
 func _physics_process(delta):
 	attack_time_2 += delta
@@ -58,7 +60,7 @@ func _physics_process(delta):
 		movment_mechanic(delta)
 		attack_mechanic()
 		if strategy == "defense":
-			defense_strategy()
+			defense_strategy(delta)
 		elif strategy == "agressive":
 			agressiv_strategy()
 
@@ -139,8 +141,7 @@ func movment_mechanic(delta):
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
-	if abs(target_rotation_degree) < 120:
-		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
+	rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 
 func death_mechanics():
@@ -158,20 +159,30 @@ func death_mechanics():
 
 # strategies
 
-func defense_strategy():
-	if enemy == null:
-		for pot_target in potential_targets:
-			if position.distance_to(pot_target.position) < 300:
-				enemy = pot_target
-	if enemy != null:
-		if position.distance_to(enemy.position) > 400:
-			enemy = null
-		elif position.distance_to(enemy.position) > 0:
-			attack_mode = "fire"
-			attack = true
+func defense_strategy(delta):
+	if HealthPoints > 50:
+		if enemy == null:
+			for pot_target in potential_targets:
+				if position.distance_to(pot_target.position) < 300:
+					enemy = pot_target
+		if enemy != null:
+			if position.distance_to(enemy.position) > 400:
+				enemy = null
+			elif position.distance_to(enemy.position) > 0:
+				attack_mode = "fire"
+				attack = true
+			else:
+				attack_mode = "bayonet"
+				attack = true
+	else:
+		attack = false
+		if is_instance_valid(enemy):
+			target_position = (position - enemy.position).normalized()
+			unit_movement(target_position, delta)
 		else:
-			attack_mode = "bayonet"
-			attack = true
+			for pot_target in potential_targets:
+				if position.distance_to(pot_target.position) < 1000:
+					enemy = pot_target
 
 func agressiv_strategy():
 	if enemy == null and len(potential_targets) > 0:
@@ -218,10 +229,10 @@ func check_clicked(pos):
 
 func update_info(empty):
 	if empty:
-		emit_signal("get_info", "")
+		emit_signal("get_info", "", null)
 	else:
 		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
-		emit_signal("get_info", info)
+		emit_signal("get_info", info, img)
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:

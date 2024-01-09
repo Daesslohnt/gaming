@@ -20,6 +20,7 @@ var strategy = "defense"
 var sprite = NAN
 var sprite_selection = NAN
 var firing_sprite = NAN
+var img = NAN
 
 var attack_time_1: float = 0
 var attack_time_2: float = 6
@@ -32,7 +33,7 @@ var DistanceDamage = 15
 var CloseDamage = 40
 
 signal enemy_clicked
-signal get_info(text_info)
+signal get_info(text_info, img)
 signal iam_dead
 
 func _ready():
@@ -44,6 +45,7 @@ func _ready():
 	sprite.play("default")
 	firing_sprite.play("none")
 	sprite_selection.visible = false
+	img = preload("res://assets/unit_images/sw_artillery.jpg")
 
 func _physics_process(delta):
 	attack_time_2 += delta
@@ -140,8 +142,7 @@ func movment_mechanic(delta):
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
-	if abs(target_rotation_degree) < 120:
-		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
+	rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 
 func death_mechanics():
@@ -220,10 +221,10 @@ func check_clicked(pos):
 
 func update_info(empty):
 	if empty:
-		emit_signal("get_info", "")
+		emit_signal("get_info", "", null)
 	else:
 		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
-		emit_signal("get_info", info)
+		emit_signal("get_info", info, img)
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:

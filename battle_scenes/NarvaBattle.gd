@@ -79,8 +79,11 @@ func _on_enemy_clicked(enemy_unit):
 	for player_unit in player_list:
 		player_unit._attack_enemy(enemy_unit)
 
-func _on_get_info(info_text):
+func _on_get_info(info_text, img):
 	$NarvaBattleCamera/Panel/Label.text = info_text
+	if img != null:
+		$NarvaBattleCamera/Panel/TextureRect.texture = img
+		$NarvaBattleCamera/Panel/TextureRect.set_expand(true)
 
 func _on_dead(attacker):
 	for unit in $units.get_children():

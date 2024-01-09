@@ -90,10 +90,10 @@ current = true
 
 [node name="Panel" type="Panel" parent="NarvaBattleCamera"]
 anchor_left = -0.036
-margin_left = 86.6667
-margin_top = 59.6667
-margin_right = 126.667
-margin_bottom = 99.6667
+margin_left = 170.0
+margin_top = 110.0
+margin_right = 210.0
+margin_bottom = 150.0
 rect_scale = Vector2( 2.05165, 1 )
 
 [node name="Label" type="Label" parent="NarvaBattleCamera/Panel"]
@@ -105,3 +105,11 @@ rect_scale = Vector2( 0.198467, 0.338965 )
 text = "Einheit:
 attack modus:
 HP:"
+
+[node name="TextureRect" type="TextureRect" parent="NarvaBattleCamera/Panel"]
+margin_left = -208.288
+margin_top = -104.333
+margin_right = -168.288
+margin_bottom = -64.3333
+rect_scale = Vector2( 1.11744, 3.58782 )
+expand = true
