@@ -1,7 +1,7 @@
 extends KinematicBody2D
 
 # narva battle camera
-const SPEED = 500  # Adjust this to control the character's movement speed
+const SPEED = 1500  # Adjust this to control the character's movement speed
 
 var velocity = Vector2()
 

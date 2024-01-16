@@ -90,12 +90,14 @@ func slection_mechanic_player():
 		update_info(true)
 		
 	if Input.is_action_just_pressed("1") and selected:
+		click_position = position
 		attack_mode = "fire"
 		attack = false
 		shrapnel = false
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
+		click_position = position
 		fire = false
 		attack = false
 		attack_mode = "shrapnel"
@@ -108,12 +110,12 @@ func slection_mechanic_player():
 
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
-		if attack_time_2-attack_time_1 > 6:
+		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	elif attack and shrapnel and attack_mode == "shrapnel":
-		if attack_time_2-attack_time_1 > 6:
+		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
@@ -164,12 +166,12 @@ func defense_strategy(delta):
 	if HealthPoints > 50:
 		if enemy == null:
 			for pot_target in potential_targets:
-				if position.distance_to(pot_target.position) < 1000:
+				if is_instance_valid(pot_target) and position.distance_to(pot_target.position) < 300:
 					enemy = pot_target
-		if enemy != null:
-			if position.distance_to(enemy.position) > 1000:
+		elif is_instance_valid(enemy):
+			if position.distance_to(enemy.position) > 400:
 				enemy = null
-			elif position.distance_to(enemy.position) > 0:
+			elif position.distance_to(enemy.position) > 100:
 				attack_mode = "fire"
 				attack = true
 			else:
@@ -177,13 +179,17 @@ func defense_strategy(delta):
 				attack = true
 	else:
 		attack = false
-		if is_instance_valid(enemy):
-			target_position = (position - enemy.position).normalized()
-			unit_movement(target_position, delta)
-		else:
-			for pot_target in potential_targets:
-				if position.distance_to(pot_target.position) < 1000:
-					enemy = pot_target
+		if attackers.size() > 0:
+			var middle_x = 0
+			var middle_y = 0
+			for attacker in attackers:
+				if is_instance_valid(attacker):
+					var mirror = 2 * position - attacker.position
+					middle_x += mirror.x
+					middle_y += mirror.y
+			middle_x = middle_x / attackers.size()
+			middle_y = middle_y / attackers.size()
+			click_position = Vector2(middle_x, middle_y)
 
 func agressiv_strategy():
 	if enemy == null and len(potential_targets) > 0:
@@ -239,5 +245,10 @@ func enemy_dead_protocol(attacker):
 	if self == attacker:
 		print("death_protocol")
 		potential_targets.erase(enemy)
+		if attacker in attackers:
+			attackers.erase(attacker)
 		enemy = null
-		attack = null
+		attack = false
+		click_position = position
+		fire = false
+		shrapnel = false

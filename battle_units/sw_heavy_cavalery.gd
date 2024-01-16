@@ -63,7 +63,7 @@ func _physics_process(delta):
 		movment_mechanic(delta)
 		attack_mechanic()
 		if strategy == "defense":
-			defense_strategy()
+			defense_strategy(delta)
 		elif strategy == "agressive":
 			agressiv_strategy()
 
@@ -93,12 +93,14 @@ func slection_mechanic_player():
 		update_info(true)
 		
 	if Input.is_action_just_pressed("1") and selected:
+		click_position = position
 		rapier = false
 		attack = false
 		attack_mode = "fire"
 		update_info(false)
 	
 	if Input.is_action_just_pressed("2") and selected:
+		click_position = position
 		fire = false
 		attack = false
 		attack_mode = "rapier"
@@ -111,12 +113,12 @@ func slection_mechanic_player():
 
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
-		if attack_time_2-attack_time_1 > 6:
+		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	elif attack and rapier and attack_mode == "rapier":
-		if attack_time_2-attack_time_1 > 6:
+		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
 			enemy.get_damaged(20, self)
 			attack_time_2 = 0
 	else:
@@ -162,20 +164,34 @@ func death_mechanics():
 
 # strategies
 
-func defense_strategy():
-	if enemy == null:
-		for pot_target in potential_targets:
-			if position.distance_to(pot_target.position) < 300:
-				enemy = pot_target
+func defense_strategy(delta):
+	if HealthPoints > 50:
+		if enemy == null:
+			for pot_target in potential_targets:
+				if is_instance_valid(pot_target) and position.distance_to(pot_target.position) < 300:
+					enemy = pot_target
+		elif is_instance_valid(enemy):
+			if position.distance_to(enemy.position) > 400:
+				enemy = null
+			elif position.distance_to(enemy.position) > 100:
+				attack_mode = "fire"
+				attack = true
+			else:
+				attack_mode = "rapier"
+				attack = true
 	else:
-		if position.distance_to(enemy.position) > 400:
-			enemy = null
-		elif position.distance_to(enemy.position) > 0:
-			attack_mode = "fire"
-			attack = true
-		else:
-			attack_mode = "rapier"
-			attack = true
+		attack = false
+		if attackers.size() > 0:
+			var middle_x = 0
+			var middle_y = 0
+			for attacker in attackers:
+				if is_instance_valid(attacker):
+					var mirror = 2 * position - attacker.position
+					middle_x += mirror.x
+					middle_y += mirror.y
+			middle_x = middle_x / attackers.size()
+			middle_y = middle_y / attackers.size()
+			click_position = Vector2(middle_x, middle_y)
 
 func agressiv_strategy():
 	if enemy == null and len(potential_targets) > 0:
@@ -229,6 +245,12 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
+		print("death_protocol")
 		potential_targets.erase(enemy)
+		if attacker in attackers:
+			attackers.erase(attacker)
 		enemy = null
-		attack = null
+		attack = false
+		click_position = position
+		fire = false
+		rapier = false

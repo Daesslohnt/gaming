@@ -21,58 +21,33 @@ var enemy_list
 
 func _ready():
 	
-	sw_infantry1 = $units/sw_infantry1
-	sw_infantry2 = $units/sw_infantry2
-	sw_light_cavalery1 = $units/sw_light_cavalery1
-	sw_heavy_cavalery1 = $units/sw_heavy_cavalery1
-	sw_cannons1 = $units/sw_cannons1
-	
-	ru_infantry1 = $units/ru_infantry1
-	ru_infantry2 = $units/ru_infantry2
-	ru_light_cavalery1 = $units/ru_light_cavalery1
-	ru_heavy_cavalery1 = $units/ru_heavy_cavalery1
-	ru_cannons1 = $units/ru_cannons1
-	
-	# death
-	sw_infantry1.connect("iam_dead", self, "_on_dead")
-	sw_infantry2.connect("iam_dead", self, "_on_dead")
-	sw_heavy_cavalery1.connect("iam_dead", self, "_on_dead")
-	sw_light_cavalery1.connect("iam_dead", self, "_on_dead")
-	sw_cannons1.connect("iam_dead", self, "_on_dead")
-	ru_infantry1.connect("iam_dead", self, "_on_dead")
-	ru_infantry2.connect("iam_dead", self, "_on_dead")
-	ru_light_cavalery1.connect("iam_dead", self, "_on_dead")
-	ru_heavy_cavalery1.connect("iam_dead", self, "_on_dead")
-	ru_cannons1.connect("iam_dead", self, "_on_dead")
-	
-	# click on enemy
-	ru_infantry1.connect("enemy_clicked", self, "_on_enemy_clicked")
-	ru_infantry2.connect("enemy_clicked", self, "_on_enemy_clicked")
-	ru_light_cavalery1.connect("enemy_clicked", self, "_on_enemy_clicked")
-	ru_heavy_cavalery1.connect("enemy_clicked", self, "_on_enemy_clicked")
-	ru_cannons1.connect("enemy_clicked", self, "_on_enemy_clicked")
-	
-	# receiving info
-	sw_infantry1.connect("get_info", self, "_on_get_info")
-	sw_infantry2.connect("get_info", self, "_on_get_info")
-	sw_light_cavalery1.connect("get_info", self, "_on_get_info")
-	sw_heavy_cavalery1.connect("get_info", self, "_on_get_info")
-	sw_cannons1.connect("get_info", self, "_on_get_info")
-	
 	# player units
-	player_list = [sw_infantry1, sw_infantry2, sw_light_cavalery1, sw_heavy_cavalery1, sw_cannons1]
+	player_list = $sw_units.get_children()
 	for player_unit in player_list:
 		player_unit.is_player = true
+		player_unit.connect("get_info", self, "_on_get_info")
+		player_unit.connect("iam_dead", self, "_on_dead")
 	
 	# AI
-	enemy_list = [ru_infantry1, ru_infantry2, ru_light_cavalery1, ru_heavy_cavalery1, ru_cannons1]
+	enemy_list = $ru_units.get_children()
 	for enemy in enemy_list:
 		enemy.potential_targets = player_list
-		
-	# strategy
-	for enemy in enemy_list:
 		enemy.strategy = "defense"
-	
+		enemy.connect("enemy_clicked", self, "_on_enemy_clicked")
+		enemy.connect("iam_dead", self, "_on_dead")
+
+func _physics_process(delta):
+	if enemy_list.size() == 0 or player_list.size() == 0:
+		get_tree().change_scene("res://world.tscn")
+	for unit in player_list + enemy_list:
+		if is_instance_valid(unit):
+			var x = unit.position.x
+			var y = unit.position.y
+			if (y > 4600 or y < -2000
+			or x > 2050 or x < -1650):
+				for attacker in unit.attackers:
+					unit.emit_signal("iam_dead", attacker)
+				unit.queue_free()
 
 func _on_enemy_clicked(enemy_unit):
 	print("got signal")
@@ -86,5 +61,10 @@ func _on_get_info(info_text, img):
 		$NarvaBattleCamera/Panel/TextureRect.set_expand(true)
 
 func _on_dead(attacker):
-	for unit in $units.get_children():
-		unit.enemy_dead_protocol(attacker)
+	for unit in player_list + enemy_list:
+		if is_instance_valid(unit):
+			unit.enemy_dead_protocol(attacker)
+	if attacker in player_list:
+		player_list.erase(attacker)
+	elif attacker in enemy_list:
+		enemy_list.erase(attacker)

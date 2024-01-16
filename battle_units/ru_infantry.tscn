@@ -62,7 +62,6 @@ shape = SubResource( 1 )
 [node name="pictogram" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.128, 0.114 )
 frames = SubResource( 2 )
-animation = "dm3"
 
 [node name="firing_sprite" type="AnimatedSprite" parent="."]
 position = Vector2( 0, -40 )
