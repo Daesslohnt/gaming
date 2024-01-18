@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/BattleOfNarvaMap.png-a84fdcffb7be1126d04278472b316eca.stex"
+path="res://.import/BattleOfPoltavaMap.jpg-8f1c1a9701acf9f8c684ef335bf88f96.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/BattleOfNarvaMap.png"
-dest_files=[ "res://.import/BattleOfNarvaMap.png-a84fdcffb7be1126d04278472b316eca.stex" ]
+source_file="res://assets/BattleOfPoltavaMap.jpg"
+dest_files=[ "res://.import/BattleOfPoltavaMap.jpg-8f1c1a9701acf9f8c684ef335bf88f96.stex" ]
 
 [params]
 

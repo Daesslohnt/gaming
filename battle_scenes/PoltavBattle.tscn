@@ -1,0 +1,535 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://battle_scenes/NarvaBattleCamera.gd" type="Script" id=1]
+[ext_resource path="res://battle_units/sw_light_cavalery.tscn" type="PackedScene" id=2]
+[ext_resource path="res://battle_units/ru_light_cavalery.tscn" type="PackedScene" id=3]
+[ext_resource path="res://battle_scenes/PoltavBattle.gd" type="Script" id=4]
+[ext_resource path="res://assets/BattleOfPoltavaMap.jpg" type="Texture" id=5]
+[ext_resource path="res://battle_units/ru_infantry.tscn" type="PackedScene" id=6]
+[ext_resource path="res://battle_units/ru_cannons.tscn" type="PackedScene" id=7]
+[ext_resource path="res://battle_units/sw_infantry.tscn" type="PackedScene" id=8]
+[ext_resource path="res://battle_units/sw_cannons.tscn" type="PackedScene" id=9]
+[ext_resource path="res://battle_units/sw_heavy_cavalery.tscn" type="PackedScene" id=10]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 5.89726
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 4 )
+
+[node name="BattleOfPoltavaMap" type="Sprite" parent="."]
+position = Vector2( 1464, 16 )
+scale = Vector2( 7.87521, 7.87521 )
+texture = ExtResource( 5 )
+
+[node name="sw_units" type="Node2D" parent="."]
+
+[node name="sw_cannons1" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 946, 781 )
+rotation = -3.11014
+
+[node name="sw_cannons2" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 520, 785 )
+rotation = -3.56623
+
+[node name="sw_cannons3" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 328, 813 )
+rotation = -3.1052
+
+[node name="sw_cannons4" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 128, 813 )
+rotation = -3.1052
+
+[node name="sw_cannons5" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( -30, 799 )
+rotation = -2.51504
+
+[node name="sw_cannons6" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( -1276, 744 )
+rotation = -3.61676
+
+[node name="sw_cannons7" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 1156, -46 )
+rotation = -2.97416
+
+[node name="sw_cannons8" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 1285, -18 )
+rotation = -2.97416
+
+[node name="sw_cannons9" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 1418, 12 )
+rotation = -2.97416
+
+[node name="sw_cannons10" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 1920, -3028 )
+rotation = -3.21846
+
+[node name="sw_cannons11" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 2088, -3041 )
+rotation = -3.21846
+
+[node name="sw_cannons12" parent="sw_units" instance=ExtResource( 9 )]
+position = Vector2( 2315, -3062 )
+rotation = -3.21846
+
+[node name="sw_infantry1" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2373, -3214 )
+rotation = 3.03341
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry2" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2169, -3208 )
+rotation = 3.03341
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry3" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 1936, -3171 )
+rotation = 3.03341
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry4" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2192, -2424 )
+rotation = 3.0932
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry5" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2346, -2422 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry6" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2496, -2426 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry7" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2661, -2424 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry8" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2814, -2426 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry9" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 2957, -2422 )
+rotation = 3.0932
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry10" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 3107, -2420 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry11" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 3246, -2424 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry12" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 3386, -2427 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry14" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 3532, -2429 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry15" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 3669, -2429 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry16" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 3814, -2429 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry17" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 3952, -2438 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry19" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( 4095, -2435 )
+rotation = 3.12405
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry20" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( -998, 710 )
+rotation = 3.26478
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry21" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( -842, 733 )
+rotation = 3.23531
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry22" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( -676, 743 )
+rotation = 3.11013
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry23" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( -398, 781 )
+rotation = 3.10423
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_infantry24" parent="sw_units" instance=ExtResource( 8 )]
+position = Vector2( -267, 746 )
+rotation = 2.97179
+scale = Vector2( 1.05521, 1.01845 )
+
+[node name="sw_light_cavalery1" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 1830, -2410 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery2" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 1978, -2413 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery3" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 4237, -2428 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery4" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 4364, -2428 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery5" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 2449, -2605 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery6" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 2595, -2602 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery7" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 2744, -2605 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery8" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 2890, -2608 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery9" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 3029, -2613 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery10" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 3185, -2610 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery11" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 3331, -2607 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery12" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 3480, -2610 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery13" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 3626, -2613 )
+rotation = 3.12894
+
+[node name="sw_light_cavalery14" parent="sw_units" instance=ExtResource( 2 )]
+position = Vector2( 3765, -2618 )
+rotation = 3.12894
+
+[node name="sw_heavy_cavalery1" parent="sw_units" instance=ExtResource( 10 )]
+position = Vector2( 1771, -959 )
+rotation = 1.5315
+
+[node name="sw_heavy_cavalery2" parent="sw_units" instance=ExtResource( 10 )]
+position = Vector2( 1767, -1093 )
+rotation = 1.5315
+
+[node name="sw_heavy_cavalery3" parent="sw_units" instance=ExtResource( 10 )]
+position = Vector2( 1765, -1227 )
+rotation = 1.5315
+
+[node name="sw_heavy_cavalery4" parent="sw_units" instance=ExtResource( 10 )]
+position = Vector2( 1869, -1185 )
+rotation = 1.5315
+
+[node name="sw_heavy_cavalery5" parent="sw_units" instance=ExtResource( 10 )]
+position = Vector2( 1863, -1037 )
+rotation = 1.5315
+
+[node name="ru_units" type="Node2D" parent="."]
+
+[node name="ru_cannons1" parent="ru_units" instance=ExtResource( 7 )]
+position = Vector2( 1676, 1578 )
+rotation = -0.68018
+
+[node name="ru_cannons2" parent="ru_units" instance=ExtResource( 7 )]
+position = Vector2( 222, 1810 )
+rotation = -0.268551
+
+[node name="ru_cannons3" parent="ru_units" instance=ExtResource( 7 )]
+position = Vector2( 1006, 1787 )
+rotation = -0.276788
+
+[node name="ru_cannons4" parent="ru_units" instance=ExtResource( 7 )]
+position = Vector2( -920, 1431 )
+rotation = -0.276788
+
+[node name="ru_infantry1" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1444, 2362 )
+rotation = 0.000908941
+
+[node name="ru_infantry2" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1309, 2362 )
+rotation = 0.000908941
+
+[node name="ru_infantry3" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1173, 2362 )
+rotation = 0.000908941
+
+[node name="ru_infantry4" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1029, 2362 )
+rotation = 0.000908941
+
+[node name="ru_infantry5" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -882, 2362 )
+rotation = 0.000908941
+
+[node name="ru_infantry6" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1441, 2692 )
+rotation = 0.000908941
+
+[node name="ru_infantry7" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1306, 2692 )
+rotation = 0.000908941
+
+[node name="ru_infantry8" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1170, 2692 )
+rotation = 0.000908941
+
+[node name="ru_infantry9" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -1026, 2692 )
+rotation = 0.000908941
+
+[node name="ru_infantry10" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( -879, 2692 )
+rotation = 0.000908941
+
+[node name="ru_infantry11" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 2844, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry12" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 2979, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry13" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3115, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry14" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3259, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry15" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3406, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry16" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3565, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry17" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3700, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry18" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3836, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry19" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3980, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry20" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4127, 1740 )
+rotation = 0.000908941
+
+[node name="ru_infantry21" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 2844, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry22" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 2979, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry23" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3115, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry24" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3259, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry25" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3406, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry26" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3565, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry27" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3700, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry28" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3836, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry29" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 3980, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry30" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4127, 1871 )
+rotation = 0.000908941
+
+[node name="ru_infantry31" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4281, 1741 )
+rotation = 0.000908941
+
+[node name="ru_infantry32" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4416, 1741 )
+rotation = 0.000908941
+
+[node name="ru_infantry33" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4552, 1741 )
+rotation = 0.000908941
+
+[node name="ru_infantry34" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4696, 1741 )
+rotation = 0.000908941
+
+[node name="ru_infantry35" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4843, 1741 )
+rotation = 0.000908941
+
+[node name="ru_infantry36" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4285, 1867 )
+rotation = 0.000908941
+
+[node name="ru_infantry37" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4420, 1867 )
+rotation = 0.000908941
+
+[node name="ru_infantry38" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4556, 1867 )
+rotation = 0.000908941
+
+[node name="ru_infantry39" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4700, 1867 )
+rotation = 0.000908941
+
+[node name="ru_infantry40" parent="ru_units" instance=ExtResource( 6 )]
+position = Vector2( 4847, 1867 )
+rotation = 0.000908941
+
+[node name="ru_light_cavalery1" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 2823, 2638 )
+
+[node name="ru_light_cavalery2" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 2970, 2641 )
+
+[node name="ru_light_cavalery3" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3110, 2640 )
+
+[node name="ru_light_cavalery4" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3257, 2640 )
+
+[node name="ru_light_cavalery5" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3390, 2640 )
+
+[node name="ru_light_cavalery6" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3527, 2641 )
+
+[node name="ru_light_cavalery7" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3674, 2644 )
+
+[node name="ru_light_cavalery8" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3814, 2643 )
+
+[node name="ru_light_cavalery9" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3961, 2643 )
+
+[node name="ru_light_cavalery10" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 4094, 2643 )
+
+[node name="ru_light_cavalery11" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 2826, 2782 )
+
+[node name="ru_light_cavalery12" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 2973, 2785 )
+
+[node name="ru_light_cavalery13" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3113, 2784 )
+
+[node name="ru_light_cavalery14" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3260, 2784 )
+
+[node name="ru_light_cavalery15" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3393, 2784 )
+
+[node name="ru_light_cavalery16" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3530, 2785 )
+
+[node name="ru_light_cavalery17" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3677, 2788 )
+
+[node name="ru_light_cavalery18" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3817, 2787 )
+
+[node name="ru_light_cavalery19" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 3964, 2787 )
+
+[node name="ru_light_cavalery20" parent="ru_units" instance=ExtResource( 3 )]
+position = Vector2( 4097, 2787 )
+
+[node name="NarvaBattleCamera" type="KinematicBody2D" parent="."]
+position = Vector2( 4214, 1939 )
+scale = Vector2( 3, 3 )
+script = ExtResource( 1 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NarvaBattleCamera"]
+position = Vector2( -0.999996, -3.05176e-05 )
+shape = SubResource( 1 )
+disabled = true
+
+[node name="Camera2D" type="Camera2D" parent="NarvaBattleCamera"]
+position = Vector2( -1, 0 )
+scale = Vector2( 0.333333, 0.333333 )
+current = true
+
+[node name="Panel" type="Panel" parent="NarvaBattleCamera"]
+anchor_left = -0.036
+margin_left = 170.0
+margin_top = 110.0
+margin_right = 210.0
+margin_bottom = 150.0
+rect_scale = Vector2( 2.1338, 1 )
+
+[node name="Label" type="Label" parent="NarvaBattleCamera/Panel"]
+margin_left = 0.974823
+margin_top = 2.0
+margin_right = 90.9748
+margin_bottom = 50.0
+rect_scale = Vector2( 0.198467, 0.338965 )
+
+[node name="TextureRect" type="TextureRect" parent="NarvaBattleCamera/Panel"]
+margin_left = -208.288
+margin_top = -104.333
+margin_right = -168.288
+margin_bottom = -64.3333
+rect_scale = Vector2( 1.11744, 3.58782 )
+expand = true
