@@ -35,6 +35,7 @@ var CloseDamage = 40
 signal enemy_clicked
 signal get_info(text_info, img)
 signal iam_dead
+signal erase_me
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
@@ -86,7 +87,6 @@ func slection_mechanic_player():
 			update_info(false)
 	
 	if Input.is_action_just_pressed("right_click") and selected:
-		selected = false
 		sprite_selection.visible = false
 		update_info(true)
 		
@@ -152,6 +152,7 @@ func death_mechanics():
 		print("Dead!!!")
 		for attacker in attackers:
 			emit_signal("iam_dead", attacker)
+		emit_signal("erase_me", self)
 		queue_free()
 	elif HealthPoints < 25:
 		sprite.play("dm3")
@@ -212,7 +213,6 @@ func agressiv_strategy():
 # logic
 
 func _attack_enemy(enemy_unit):
-	print("Player clicked on an enemy.")
 	if selected:
 		enemy = enemy_unit
 		attack = true
@@ -221,7 +221,6 @@ func _attack_enemy(enemy_unit):
 	update_info(true)
 
 func get_damaged(dm, attacker):
-	print("get damaged ", dm)
 	if not (attacker in attackers):
 		attackers.append(attacker)
 	HealthPoints -= dm
@@ -243,7 +242,6 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
-		print("death_protocol")
 		potential_targets.erase(enemy)
 		if attacker in attackers:
 			attackers.erase(attacker)

@@ -35,10 +35,11 @@ func _ready():
 		enemy.strategy = "defense"
 		enemy.connect("enemy_clicked", self, "_on_enemy_clicked")
 		enemy.connect("iam_dead", self, "_on_dead")
+		enemy.connect("erase_me", self, "_do_erasion")
 
 func _physics_process(delta):
-	if enemy_list.size() == 0 or player_list.size() == 0:
-		get_tree().change_scene("res://world.tscn")
+	if enemy_list.size() < 10:
+		get_tree().change_scene("res://result_scene/sw_win.tscn")
 	for unit in player_list + enemy_list:
 		if is_instance_valid(unit):
 			var x = unit.position.x
@@ -47,6 +48,7 @@ func _physics_process(delta):
 			or x > 2050 or x < -1650):
 				for attacker in unit.attackers:
 					unit.emit_signal("iam_dead", attacker)
+				unit.emit_signal("erase_me", self)
 				unit.queue_free()
 
 func _on_enemy_clicked(enemy_unit):
@@ -64,7 +66,7 @@ func _on_dead(attacker):
 	for unit in player_list + enemy_list:
 		if is_instance_valid(unit):
 			unit.enemy_dead_protocol(attacker)
-	if attacker in player_list:
-		player_list.erase(attacker)
-	elif attacker in enemy_list:
-		enemy_list.erase(attacker)
+
+func _do_erasion(unit):
+	if unit in enemy_list:
+		enemy_list.erase(unit)

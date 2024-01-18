@@ -28,13 +28,14 @@ var removalTimer = 0
 var timerStarted = false
 
 # Mechanics
-var HealthPoints = 100
+var HealthPoints = 1000
 var Discipline = 100
 var DistanceDamage = 15
 
 signal enemy_clicked
 signal get_info(text_info, img)
 signal iam_dead
+signal erase_me
 
 
 func _ready():
@@ -114,7 +115,7 @@ func slection_mechanic_player():
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(20, self)
+			enemy.get_damaged(40, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	elif attack and rapier and attack_mode == "rapier":
@@ -214,7 +215,6 @@ func agressiv_strategy():
 # logic
 
 func _attack_enemy(enemy_unit):
-	print("Player clicked on an enemy.")
 	if selected:
 		enemy = enemy_unit
 		attack = true
@@ -223,7 +223,6 @@ func _attack_enemy(enemy_unit):
 	update_info(true)
 
 func get_damaged(dm, attacker):
-	print("get damaged ", dm)
 	attackers.append(attacker)
 	HealthPoints -= dm
 	if HealthPoints < 0:
@@ -245,7 +244,6 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
-		print("death_protocol")
 		potential_targets.erase(enemy)
 		if attacker in attackers:
 			attackers.erase(attacker)

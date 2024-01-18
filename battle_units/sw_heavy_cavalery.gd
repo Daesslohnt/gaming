@@ -35,6 +35,7 @@ var DistanceDamage = 15
 signal enemy_clicked
 signal get_info(text_info, img)
 signal iam_dead
+signal erase_me
 
 
 func _ready():
@@ -154,6 +155,7 @@ func death_mechanics():
 		print("Dead!!!")
 		for attacker in attackers:
 			emit_signal("iam_dead", attacker)
+		emit_signal("erase_me", self)
 		queue_free()
 	elif HealthPoints < 25:
 		sprite.play("dm3")
@@ -214,7 +216,6 @@ func agressiv_strategy():
 # logic
 
 func _attack_enemy(enemy_unit):
-	print("Player clicked on an enemy.")
 	if selected:
 		enemy = enemy_unit
 		attack = true
@@ -223,7 +224,6 @@ func _attack_enemy(enemy_unit):
 	update_info(true)
 
 func get_damaged(dm, attacker):
-	print("get damaged ", dm)
 	attackers.append(attacker)
 	HealthPoints -= dm
 	if HealthPoints < 0:
@@ -245,7 +245,6 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
-		print("death_protocol")
 		potential_targets.erase(enemy)
 		if attacker in attackers:
 			attackers.erase(attacker)

@@ -191,21 +191,6 @@ position = Vector2( 1907, 1301 )
 rotation = 3.20516
 scale = Vector2( 1.48903, 1.52826 )
 
-[node name="ru_infantry15" parent="ru_units" instance=ExtResource( 4 )]
-position = Vector2( 2130, 1316 )
-rotation = 3.20516
-scale = Vector2( 1.48903, 1.52826 )
-
-[node name="ru_infantry16" parent="ru_units" instance=ExtResource( 4 )]
-position = Vector2( 2376, 1334 )
-rotation = 3.20516
-scale = Vector2( 1.48903, 1.52826 )
-
-[node name="ru_infantry17" parent="ru_units" instance=ExtResource( 4 )]
-position = Vector2( 2608, 1350 )
-rotation = 3.20516
-scale = Vector2( 1.48903, 1.52826 )
-
 [node name="ru_infantry5" parent="ru_units" instance=ExtResource( 4 )]
 position = Vector2( -24, -340 )
 rotation = -2.05531
@@ -287,7 +272,7 @@ margin_left = 170.0
 margin_top = 110.0
 margin_right = 210.0
 margin_bottom = 150.0
-rect_scale = Vector2( 2.05165, 1 )
+rect_scale = Vector2( 2.1338, 1 )
 
 [node name="Label" type="Label" parent="NarvaBattleCamera/Panel"]
 margin_left = 0.974823
@@ -295,9 +280,6 @@ margin_top = 2.0
 margin_right = 90.9748
 margin_bottom = 50.0
 rect_scale = Vector2( 0.198467, 0.338965 )
-text = "Einheit:
-attack modus:
-HP:"
 
 [node name="TextureRect" type="TextureRect" parent="NarvaBattleCamera/Panel"]
 margin_left = -208.288
