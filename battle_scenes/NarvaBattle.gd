@@ -40,19 +40,20 @@ func _ready():
 func _physics_process(delta):
 	if enemy_list.size() < 10:
 		get_tree().change_scene("res://result_scene/sw_win.tscn")
+	elif player_list.size() < 10:
+		get_tree().change_scene("res://result_scene/sw_lost.tscn")
 	for unit in player_list + enemy_list:
 		if is_instance_valid(unit):
 			var x = unit.position.x
 			var y = unit.position.y
-			if (y > 4600 or y < -2000
-			or x > 2050 or x < -1650):
+			if (x > 4600 or x < -2000
+			or y > 2050 or y < -1650):
 				for attacker in unit.attackers:
 					unit.emit_signal("iam_dead", attacker)
 				unit.emit_signal("erase_me", self)
 				unit.queue_free()
 
 func _on_enemy_clicked(enemy_unit):
-	print("got signal")
 	for player_unit in player_list:
 		player_unit._attack_enemy(enemy_unit)
 
