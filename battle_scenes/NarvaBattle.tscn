@@ -1,6 +1,7 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://battle_scenes/NarvaBattleCamera.gd" type="Script" id=1]
+[ext_resource path="res://assets/BattleOfNarvaMap.jpg" type="Texture" id=2]
 [ext_resource path="res://battle_units/sw_infantry.tscn" type="PackedScene" id=3]
 [ext_resource path="res://battle_units/ru_infantry.tscn" type="PackedScene" id=4]
 [ext_resource path="res://battle_scenes/NarvaBattle.gd" type="Script" id=5]
@@ -11,10 +12,6 @@
 [ext_resource path="res://battle_units/sw_cannons.tscn" type="PackedScene" id=10]
 [ext_resource path="res://battle_units/ru_cannons.tscn" type="PackedScene" id=11]
 
-[sub_resource type="StreamTexture" id=2]
-flags = 4
-load_path = "res://.import/BattleOfNarvaMap.png-a84fdcffb7be1126d04278472b316eca.stex"
-
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.89726
 
@@ -24,7 +21,7 @@ script = ExtResource( 5 )
 [node name="BattleOfNarvaMap" type="Sprite" parent="."]
 position = Vector2( 1464, 16 )
 scale = Vector2( 7.87521, 7.87521 )
-texture = SubResource( 2 )
+texture = ExtResource( 2 )
 
 [node name="sw_units" type="Node2D" parent="."]
 

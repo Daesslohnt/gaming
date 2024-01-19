@@ -252,7 +252,7 @@ func update_info(empty):
 	if empty:
 		emit_signal("get_info", "", null)
 	else:
-		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
+		var info = "Einheit: Linien Infanterie\nAngriffsmodus: " + attack_mode + "\nTreffpunkte: " + str(HealthPoints)
 		emit_signal("get_info", info, img)
 
 func enemy_dead_protocol(attacker):

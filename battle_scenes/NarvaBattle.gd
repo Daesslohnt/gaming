@@ -1,19 +1,6 @@
 extends Node2D
 
 
-var sw_infantry1
-var sw_infantry2
-var sw_light_cavalery1
-var sw_heavy_cavalery1
-var sw_cannons1
-
-
-var ru_infantry1
-var ru_infantry2
-var ru_light_cavalery1
-var ru_heavy_cavalery1
-var ru_cannons1
-
 var player_list
 var enemy_list
 

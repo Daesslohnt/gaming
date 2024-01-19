@@ -74,6 +74,7 @@ func selection_mechanic_npc():
 func slection_mechanic_player():
 	if Input.is_action_just_pressed("left_click") and selected:
 		click_position = get_global_mouse_position()
+		print(click_position)
 		selected = false
 		attack = false
 		sprite_selection.visible = false
@@ -138,7 +139,7 @@ func movment_mechanic(delta):
 			rapier = true
 		unit_movement(target_position, delta)
 	else:
-		if is_instance_valid(enemy) and position.distance_to(click_position) > 50:
+		if position.distance_to(click_position) > 50:
 			target_position = (click_position - position).normalized()
 			unit_movement(target_position, delta)
 
@@ -237,7 +238,7 @@ func update_info(empty):
 	if empty:
 		emit_signal("get_info", "", null)
 	else:
-		var info = "Unit: Infantry\nAttack mode: " + attack_mode + "\nHP: " + str(HealthPoints)
+		var info = "Einheit: Dragoner\nAngriffsmodus: " + attack_mode + "\nTreffpunkte: " + str(HealthPoints)
 		emit_signal("get_info", info, img)
 
 func enemy_dead_protocol(attacker):
