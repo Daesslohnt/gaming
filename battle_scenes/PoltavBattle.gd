@@ -33,8 +33,8 @@ func _physics_process(delta):
 		if is_instance_valid(unit):
 			var x = unit.position.x
 			var y = unit.position.y
-			if (x > 4600 or x < -2000
-			or y > 2050 or y < -1650):
+			if (x > 6750 or x < -3750
+			or y > 3750 or y < -3600):
 				for attacker in unit.attackers:
 					unit.emit_signal("iam_dead", attacker)
 				unit.emit_signal("erase_me", self)

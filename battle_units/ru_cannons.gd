@@ -82,12 +82,12 @@ func slection_mechanic_player():
 	if Input.is_action_just_pressed("left_click") and not selected:
 		var select_position = get_global_mouse_position()
 		if check_clicked(select_position):
+			selected = true
 			sprite_selection.visible = true
 			update_info(false)
 	
 	if Input.is_action_just_pressed("right_click") and selected:
 		sprite_selection.visible = false
-		selected = false
 		update_info(true)
 		
 	if Input.is_action_just_pressed("1") and selected:
