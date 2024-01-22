@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-const SPEED = 500  # Adjust this to control the character's movement speed
+const SPEED = 1000  # Adjust this to control the character's movement speed
 
 var velocity = Vector2()
 

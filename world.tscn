@@ -51,7 +51,34 @@ text = "Narva
 align = 1
 valign = 1
 
-[node name="Stokholm" type="TextureRect" parent="."]
+[node name="Poltava" type="TextureButton" parent="."]
+margin_left = 703.0
+margin_top = 933.0
+margin_right = 1215.0
+margin_bottom = 1445.0
+rect_scale = Vector2( 0.1, 0.1 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 7 )
+texture_hover = ExtResource( 6 )
+
+[node name="Label" type="Label" parent="Poltava"]
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 50.0
+margin_top = 530.0
+margin_right = 93.0
+margin_bottom = 561.0
+rect_scale = Vector2( 9.86779, 8.61875 )
+theme = SubResource( 2 )
+text = "Poltava
+1709"
+align = 1
+valign = 1
+
+[node name="Background" type="Node2D" parent="."]
+
+[node name="Stokholm" type="TextureRect" parent="Background"]
 margin_left = -387.0
 margin_top = -75.0
 margin_right = 125.0
@@ -59,7 +86,7 @@ margin_bottom = 437.0
 rect_scale = Vector2( 0.14498, 0.14498 )
 texture = ExtResource( 5 )
 
-[node name="Label" type="Label" parent="Stokholm"]
+[node name="Label" type="Label" parent="Background/Stokholm"]
 margin_left = 27.5898
 margin_top = 531.109
 margin_right = 87.5898
@@ -69,7 +96,7 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Stokholm"
 align = 1
 
-[node name="Viborg" type="TextureRect" parent="."]
+[node name="Viborg" type="TextureRect" parent="Background"]
 margin_left = 346.0
 margin_top = -149.0
 margin_right = 858.0
@@ -77,7 +104,7 @@ margin_bottom = 363.0
 rect_scale = Vector2( 0.0777592, 0.0777592 )
 texture = ExtResource( 5 )
 
-[node name="Label" type="Label" parent="Viborg"]
+[node name="Label" type="Label" parent="Background/Viborg"]
 margin_left = 27.5898
 margin_top = 531.109
 margin_right = 87.5898
@@ -87,7 +114,7 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Viborg"
 align = 1
 
-[node name="Riga" type="TextureRect" parent="."]
+[node name="Riga" type="TextureRect" parent="Background"]
 margin_left = 41.0
 margin_top = 194.0
 margin_right = 553.0
@@ -95,7 +122,7 @@ margin_bottom = 706.0
 rect_scale = Vector2( 0.121204, 0.121204 )
 texture = ExtResource( 5 )
 
-[node name="Label" type="Label" parent="Riga"]
+[node name="Label" type="Label" parent="Background/Riga"]
 margin_left = 24.7516
 margin_top = 528.036
 margin_right = 84.7516
@@ -105,7 +132,7 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Riga"
 align = 1
 
-[node name="Reval" type="TextureRect" parent="."]
+[node name="Reval" type="TextureRect" parent="Background"]
 margin_left = 64.0
 margin_top = -28.0
 margin_right = 576.0
@@ -113,7 +140,7 @@ margin_bottom = 484.0
 rect_scale = Vector2( 0.101179, 0.101179 )
 texture = ExtResource( 5 )
 
-[node name="Label" type="Label" parent="Reval"]
+[node name="Label" type="Label" parent="Background/Reval"]
 margin_left = 24.7516
 margin_top = 528.036
 margin_right = 84.7516
@@ -123,7 +150,7 @@ custom_colors/font_color = Color( 0, 0, 0, 1 )
 text = "Reval"
 align = 1
 
-[node name="Moskva" type="TextureRect" parent="."]
+[node name="Moskva" type="TextureRect" parent="Background"]
 margin_left = 748.0
 margin_top = 313.0
 margin_right = 1260.0
@@ -131,7 +158,7 @@ margin_bottom = 825.0
 rect_scale = Vector2( 0.238524, 0.238524 )
 texture = ExtResource( 5 )
 
-[node name="Label" type="Label" parent="Moskva"]
+[node name="Label" type="Label" parent="Background/Moskva"]
 margin_left = 27.5903
 margin_top = 531.109
 margin_right = 87.5903
@@ -142,4 +169,8 @@ text = "Moskva"
 align = 1
 
 [connection signal="pressed" from="Narva" to="." method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="Narva" to="." method="_on_Narva_pressed"]
 [connection signal="pressed" from="Narva" to="MapCamera" method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="Poltava" to="." method="_on_Poltava_pressed"]
+[connection signal="pressed" from="Poltava" to="." method="_on_TextureButton_pressed"]
+[connection signal="pressed" from="Poltava" to="MapCamera" method="_on_TextureButton_pressed"]
