@@ -2,7 +2,6 @@ extends KinematicBody2D
 
 var is_player = false
 
-export var speed = 100
 var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
 var target_position = Vector2(0, 0)
@@ -27,10 +26,10 @@ var attack_time_2: float = 6
 
 
 # Mechanics
-var HealthPoints = 100
-var Discipline = 100
-var DistanceDamage = 15
-var CloseDamage = 40
+export var speed = 20
+var HealthPoints = 30
+var DistanceDamage = 30
+var CloseDamage = 50
 
 signal enemy_clicked
 signal get_info(text_info, img)
@@ -112,12 +111,13 @@ func slection_mechanic_player():
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(20, self)
+			enemy.get_damaged(DistanceDamage, self)
+			$fire.play()
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	elif attack and shrapnel and attack_mode == "shrapnel":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(20, self)
+			enemy.get_damaged(CloseDamage, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	else:
@@ -155,11 +155,11 @@ func death_mechanics():
 			emit_signal("iam_dead", attacker)
 		emit_signal("erase_me", self)
 		queue_free()
-	elif HealthPoints < 25:
+	elif HealthPoints < 5:
 		sprite.play("dm3")
-	elif HealthPoints < 50:
+	elif HealthPoints < 10:
 		sprite.play("dm2")
-	elif HealthPoints < 75:
+	elif HealthPoints < 20:
 		sprite.play("dm1")
 
 # strategies

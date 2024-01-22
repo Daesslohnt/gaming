@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://battle_scenes/NarvaBattleCamera.gd" type="Script" id=1]
 [ext_resource path="res://assets/BattleOfNarvaMap.jpg" type="Texture" id=2]
@@ -11,6 +11,10 @@
 [ext_resource path="res://battle_units/ru_heavy_cavalery.tscn" type="PackedScene" id=9]
 [ext_resource path="res://battle_units/sw_cannons.tscn" type="PackedScene" id=10]
 [ext_resource path="res://battle_units/ru_cannons.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/sound/battle_main.wav" type="AudioStream" id=12]
+[ext_resource path="res://battle_scenes/background.gd" type="Script" id=13]
+[ext_resource path="res://assets/sound/eng_march_attack.wav" type="AudioStream" id=14]
+[ext_resource path="res://assets/sound/cavalery.mp3" type="AudioStream" id=15]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 5.89726
@@ -252,7 +256,7 @@ rotation = -8.95317
 scale = Vector2( 1.40403, 1.40403 )
 
 [node name="NarvaBattleCamera" type="KinematicBody2D" parent="."]
-position = Vector2( 226, 720 )
+position = Vector2( -51, 610 )
 scale = Vector2( 3, 3 )
 script = ExtResource( 1 )
 
@@ -268,10 +272,10 @@ current = true
 
 [node name="Panel" type="Panel" parent="NarvaBattleCamera"]
 anchor_left = -0.036
-margin_left = 170.0
-margin_top = 110.0
-margin_right = 210.0
-margin_bottom = 150.0
+margin_left = 138.333
+margin_top = 76.0
+margin_right = 178.333
+margin_bottom = 116.0
 rect_scale = Vector2( 2.1338, 1 )
 
 [node name="Label" type="Label" parent="NarvaBattleCamera/Panel"]
@@ -282,9 +286,19 @@ margin_bottom = 50.0
 rect_scale = Vector2( 0.198467, 0.338965 )
 
 [node name="TextureRect" type="TextureRect" parent="NarvaBattleCamera/Panel"]
-margin_left = -208.288
-margin_top = -104.333
-margin_right = -168.288
-margin_bottom = -64.3333
-rect_scale = Vector2( 1.11744, 3.58782 )
+margin_left = -170.9
+margin_top = -74.6667
+margin_right = -130.9
+margin_bottom = -34.667
+rect_scale = Vector2( 0.956015, 2.86945 )
 expand = true
+
+[node name="background" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+script = ExtResource( 13 )
+
+[node name="march" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 14 )
+
+[node name="cavalery" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 15 )

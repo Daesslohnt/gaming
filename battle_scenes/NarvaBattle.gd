@@ -4,9 +4,15 @@ extends Node2D
 var player_list
 var enemy_list
 
+var march_on = false
+var cavalery_march = false
+
 # This script is attached to the ParentNode.
 
 func _ready():
+	
+	$march.connect("finished", self, "_on_finish_march")
+	$cavalery.connect("finished", self, "_on_finish_cavalery")
 	
 	# player units
 	player_list = $sw_units.get_children()
@@ -14,6 +20,8 @@ func _ready():
 		player_unit.is_player = true
 		player_unit.connect("get_info", self, "_on_get_info")
 		player_unit.connect("iam_dead", self, "_on_dead")
+		player_unit.connect("march_on", self, "_on_march")
+		player_unit.connect("cavalery_march", self, "_on_march")
 	
 	# AI
 	enemy_list = $ru_units.get_children()
@@ -23,6 +31,10 @@ func _ready():
 		enemy.connect("enemy_clicked", self, "_on_enemy_clicked")
 		enemy.connect("iam_dead", self, "_on_dead")
 		enemy.connect("erase_me", self, "_do_erasion")
+		enemy.connect("march_on", self, "_on_march")
+		enemy.connect("cavalery_march", self, "_on_march")
+	
+	$background.start_audio_loop()
 
 func _physics_process(delta):
 	if enemy_list.size() < 10:
@@ -58,3 +70,17 @@ func _on_dead(attacker):
 func _do_erasion(unit):
 	if unit in enemy_list:
 		enemy_list.erase(unit)
+
+func _on_march():
+	if not march_on:
+		$march.play()
+		march_on = true
+	if not cavalery_march:
+		$cavalery.play()
+		cavalery_march = true
+
+func _on_finish_march():
+	march_on = false
+
+func _on_finish_cavalery():
+	cavalery_march = false

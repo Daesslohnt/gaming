@@ -2,7 +2,6 @@ extends KinematicBody2D
 
 var is_player = false
 
-export var speed = 100
 var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
 var target_position = Vector2(0, 0)
@@ -29,8 +28,8 @@ var removalTimer = 0
 var timerStarted = false
 
 # Mechanics
+export var speed = 50
 var HealthPoints = 100
-var Discipline = 100
 var DistanceDamage = 15
 var CloseDamage = 30
 
@@ -39,6 +38,7 @@ signal enemy_clicked
 signal get_info(text_info, img)
 signal iam_dead
 signal erase_me
+signal march_on
 
 
 func _ready():
@@ -101,6 +101,7 @@ func slection_mechanic_player():
 		sprite_selection.visible = false
 		update_info(true)
 		
+		
 	if Input.is_action_just_pressed("1") and selected:
 		click_position = position
 		pikes = false
@@ -125,12 +126,13 @@ func slection_mechanic_player():
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(20, self)
+			enemy.get_damaged(DistanceDamage, self)
+			$fire.play()
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	elif attack and pikes and attack_mode == "pikes":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(40, self)
+			enemy.get_damaged(CloseDamage, self)
 			attack_time_2 = 0
 	else:
 		firing_sprite.play("none")
@@ -160,6 +162,7 @@ func unit_movement(target_position, delta):
 	if abs(target_rotation_degree) < 120:
 		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
+	emit_signal("march_on")
 
 func death_mechanics():
 	if HealthPoints == 0:

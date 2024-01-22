@@ -2,7 +2,6 @@ extends KinematicBody2D
 
 var is_player = false
 
-export var speed = 100
 var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
 var target_position = Vector2(0, 0)
@@ -13,7 +12,7 @@ var selected = false
 var attack = false
 var fire = false
 var rapier = false
-var attack_mode = "fire"
+var attack_mode = "rapier"
 var strategy = "defense"
 
 # sprites
@@ -28,15 +27,16 @@ var removalTimer = 0
 var timerStarted = false
 
 # Mechanics
-var HealthPoints = 100
-var Discipline = 100
-var DistanceDamage = 15
+export var speed = 100
+var HealthPoints = 150
+var DistanceDamage = 5
+var CloseDamage = 30
 
 signal enemy_clicked
 signal get_info(text_info, img)
 signal iam_dead
 signal erase_me
-
+signal cavalery_march
 
 func _ready():
 	click_position = Vector2(position.x, position.y)
@@ -115,12 +115,12 @@ func slection_mechanic_player():
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(20, self)
+			enemy.get_damaged(DistanceDamage, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	elif attack and rapier and attack_mode == "rapier":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(20, self)
+			enemy.get_damaged(CloseDamage, self)
 			attack_time_2 = 0
 	else:
 		firing_sprite.play("none")
@@ -149,6 +149,7 @@ func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
 	rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
+	emit_signal("cavalery_march")
 
 func death_mechanics():
 	if HealthPoints == 0:
@@ -161,7 +162,7 @@ func death_mechanics():
 		sprite.play("dm3")
 	elif HealthPoints < 50:
 		sprite.play("dm2")
-	elif HealthPoints < 75:
+	elif HealthPoints < 100:
 		sprite.play("dm1")
 
 # strategies

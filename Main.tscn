@@ -6,17 +6,17 @@
 script = ExtResource( 1 )
 
 [node name="spielen" type="Button" parent="."]
-margin_left = 574.0
-margin_top = 304.0
-margin_right = 989.0
-margin_bottom = 437.0
+margin_left = 470.0
+margin_top = 219.0
+margin_right = 885.0
+margin_bottom = 352.0
 text = "Spielen"
 
 [node name="schliessen" type="Button" parent="."]
-margin_left = 573.0
-margin_top = 502.0
-margin_right = 988.0
-margin_bottom = 635.0
+margin_left = 469.0
+margin_top = 417.0
+margin_right = 884.0
+margin_bottom = 550.0
 text = "Schliessen"
 
 [connection signal="pressed" from="spielen" to="." method="_on_spielen_pressed"]

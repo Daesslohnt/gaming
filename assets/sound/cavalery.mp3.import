@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/cavalery.mp3-7302fb2c0f4239b6333eb60531961d3e.mp3str"
+
+[deps]
+
+source_file="res://assets/sound/cavalery.mp3"
+dest_files=[ "res://.import/cavalery.mp3-7302fb2c0f4239b6333eb60531961d3e.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -2,7 +2,6 @@ extends KinematicBody2D
 
 var is_player = false
 
-export var speed = 100
 var velocity = Vector2(0, 0)
 var click_position = Vector2(0, 0)
 var target_position = Vector2(0, 0)
@@ -28,14 +27,16 @@ var removalTimer = 0
 var timerStarted = false
 
 # Mechanics
-var HealthPoints = 1000
-var Discipline = 100
-var DistanceDamage = 15
+export var speed = 120
+var HealthPoints = 75
+var DistanceDamage = 10
+var CloseDamage = 20
 
 signal enemy_clicked
 signal get_info(text_info, img)
 signal iam_dead
 signal erase_me
+signal cavalery_march
 
 
 func _ready():
@@ -115,12 +116,12 @@ func slection_mechanic_player():
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(40, self)
+			enemy.get_damaged(DistanceDamage, self)
 			attack_time_2 = 0
 		firing_sprite.play("firing")
 	elif attack and rapier and attack_mode == "rapier":
 		if is_instance_valid(enemy) and attack_time_2-attack_time_1 > 6:
-			enemy.get_damaged(20, self)
+			enemy.get_damaged(CloseDamage, self)
 			attack_time_2 = 0
 	else:
 		firing_sprite.play("none")
@@ -149,6 +150,7 @@ func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
 	rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
+	emit_signal("cavalery_march")
 
 func death_mechanics():
 	if HealthPoints == 0:
@@ -156,11 +158,11 @@ func death_mechanics():
 		for attacker in attackers:
 			emit_signal("iam_dead", attacker)
 		queue_free()
-	elif HealthPoints < 25:
+	elif HealthPoints < 15:
 		sprite.play("dm3")
-	elif HealthPoints < 50:
+	elif HealthPoints < 30:
 		sprite.play("dm2")
-	elif HealthPoints < 75:
+	elif HealthPoints < 65:
 		sprite.play("dm1")
 
 # strategies
