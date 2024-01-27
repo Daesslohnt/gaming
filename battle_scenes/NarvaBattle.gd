@@ -20,6 +20,7 @@ func _ready():
 		player_unit.is_player = true
 		player_unit.connect("get_info", self, "_on_get_info")
 		player_unit.connect("iam_dead", self, "_on_dead")
+		player_unit.connect("erase_me", self, "_do_erasion")
 		player_unit.connect("march_on", self, "_on_march")
 		player_unit.connect("cavalery_march", self, "_on_march")
 	
@@ -70,6 +71,8 @@ func _on_dead(attacker):
 func _do_erasion(unit):
 	if unit in enemy_list:
 		enemy_list.erase(unit)
+	elif unit in player_list:
+		player_list.erase(unit)
 
 func _on_march():
 	if not march_on:

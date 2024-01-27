@@ -107,6 +107,8 @@ func slection_mechanic_player():
 		fire = false
 		shrapnel = false
 		attack = false
+		click_position = position
+		target_position = position
 
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
@@ -168,18 +170,23 @@ func defense_strategy(delta):
 	if HealthPoints > 50:
 		if enemy == null:
 			for pot_target in potential_targets:
-				if is_instance_valid(pot_target) and position.distance_to(pot_target.position) < 300:
+				if is_instance_valid(pot_target) and position.distance_to(pot_target.position) < 1000:
 					enemy = pot_target
 		elif is_instance_valid(enemy):
-			if position.distance_to(enemy.position) > 400:
+			if position.distance_to(enemy.position) > 1000:
 				enemy = null
-			elif position.distance_to(enemy.position) > 100:
+			elif position.distance_to(enemy.position) > 300:
 				attack_mode = "fire"
 				attack = true
+				fire = true
+				shrapnel = false
 			else:
 				attack_mode = "shrapnel"
 				attack = true
+				fire = false
+				shrapnel = true
 	else:
+		enemy = null
 		attack = false
 		if attackers.size() > 0:
 			var middle_x = 0
@@ -243,11 +250,12 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
-		potential_targets.erase(enemy)
-		if attacker in attackers:
-			attackers.erase(attacker)
-		enemy = null
+		potential_targets.erase(attacker)
+		attackers.erase(attacker)
+		if attacker == enemy:
+			enemy = null
 		attack = false
 		click_position = position
+		target_position = position
 		fire = false
 		shrapnel = false

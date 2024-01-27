@@ -112,6 +112,8 @@ func slection_mechanic_player():
 		fire = false
 		rapier = false
 		attack = false
+		click_position = position
+		target_position = position
 
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
@@ -128,7 +130,7 @@ func attack_mechanic():
 
 func movment_mechanic(delta):
 	if is_instance_valid(enemy) and attack and attack_mode == "fire":
-		if position.distance_to(enemy.position) > 300:
+		if position.distance_to(enemy.position) > 200:
 			target_position = (enemy.position - position).normalized()
 			unit_movement(target_position, delta)
 		else:
@@ -148,7 +150,8 @@ func movment_mechanic(delta):
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
-	rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
+	if abs(target_rotation_degree) < 90:
+		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 	emit_signal("cavalery_march")
 
@@ -176,13 +179,12 @@ func defense_strategy(delta):
 		elif is_instance_valid(enemy):
 			if position.distance_to(enemy.position) > 400:
 				enemy = null
-			elif position.distance_to(enemy.position) > 100:
-				attack_mode = "fire"
-				attack = true
 			else:
 				attack_mode = "rapier"
 				attack = true
+				rapier = true
 	else:
+		enemy = null
 		attack = false
 		if attackers.size() > 0:
 			var middle_x = 0
@@ -246,11 +248,12 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
-		potential_targets.erase(enemy)
-		if attacker in attackers:
-			attackers.erase(attacker)
-		enemy = null
+		potential_targets.erase(attacker)
+		attackers.erase(attacker)
+		if attacker == enemy:
+			enemy = null
 		attack = false
 		click_position = position
+		target_position = position
 		fire = false
 		rapier = false

@@ -108,6 +108,8 @@ func slection_mechanic_player():
 		fire = false
 		bayonet = false
 		attack = false
+		click_position = position
+		target_position = position
 
 func attack_mechanic():
 	if attack and fire and attack_mode == "fire":
@@ -145,13 +147,13 @@ func movment_mechanic(delta):
 
 func unit_movement(target_position, delta):
 	var target_rotation_degree = rad2deg(target_position.angle()) + 90
-	rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
+	if abs(target_rotation_degree) < 90:
+		rotation_degrees = lerp(rotation_degrees, target_rotation_degree, 1.2 * delta)
 	move_and_slide(target_position * speed)
 	emit_signal("march_on")
 
 func death_mechanics():
 	if HealthPoints == 0:
-		print("Dead!!!")
 		for attacker in attackers:
 			emit_signal("iam_dead", attacker)
 		emit_signal("erase_me", self)
@@ -174,13 +176,19 @@ func defense_strategy(delta):
 		elif is_instance_valid(enemy):
 			if position.distance_to(enemy.position) > 400:
 				enemy = null
-			elif position.distance_to(enemy.position) > 100:
+			elif position.distance_to(enemy.position) > 150:
 				attack_mode = "fire"
 				attack = true
+				bayonet = false
+				fire = true
 			else:
 				attack_mode = "bayonet"
 				attack = true
+				bayonet = true
+				fire = false
+				firing_sprite.play("default")
 	else:
+		enemy = null
 		attack = false
 		if attackers.size() > 0:
 			var middle_x = 0
@@ -244,11 +252,12 @@ func update_info(empty):
 
 func enemy_dead_protocol(attacker):
 	if self == attacker:
-		potential_targets.erase(enemy)
-		if attacker in attackers:
-			attackers.erase(attacker)
-		enemy = null
+		potential_targets.erase(attacker)
+		attackers.erase(attacker)
+		if attacker == enemy:
+			enemy = null
 		attack = false
 		click_position = position
+		target_position = position
 		fire = false
 		bayonet = false
