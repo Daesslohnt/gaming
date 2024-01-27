@@ -4,7 +4,12 @@ var textureRect
 var button
 var textures = [
 	preload("res://assets/intro/Poltava/start_img.jpg"),
-	preload("res://assets/intro/Poltava/map_instruction.jpg")
+	preload("res://assets/intro/Poltava/artillerie_info.png"),
+	preload("res://assets/intro/Poltava/infanterie_info.png"),
+	preload("res://assets/intro/Poltava/kavallerie_info.png"),
+	preload("res://assets/intro/Poltava/map_instruction.jpg"),
+	preload("res://assets/intro/infoblatt1.png"),
+	preload("res://assets/intro/infoblatt2.png")
 ]
 
 func _ready():
@@ -23,7 +28,7 @@ func _onButtonPressed(index):
 	if currentIndex == textures.size()-1:
 		button.text = "Start"
 	if currentIndex == textures.size():
-		get_tree().change_scene("res://battle_scenes/NarvaBattle.tscn")
+		get_tree().change_scene("res://battle_scenes/PoltavBattle.tscn")
 		return
 
 	textureRect.texture = textures[currentIndex]

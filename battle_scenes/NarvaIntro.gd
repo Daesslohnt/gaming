@@ -3,11 +3,14 @@ extends Node2D
 var textureRect
 var button
 var textures = [
-	preload("res://assets/intro/Narva/title.png"),
+	#preload("res://assets/intro/Narva/title.png"),
 	preload("res://assets/intro/Narva/info.png"),
+	preload("res://assets/intro/Narva/artillerie_info.png"),
+	preload("res://assets/intro/Narva/infanterie_info.png"),
+	preload("res://assets/intro/Narva/kavallerie_info.png"),
 	preload("res://assets/intro/Narva/map.jpg"),
-	preload("res://assets/intro/infoblatt.png")
-	
+	preload("res://assets/intro/infoblatt1.png"),
+	preload("res://assets/intro/infoblatt2.png")
 ]
 
 func _ready():
